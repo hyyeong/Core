@@ -23,7 +23,8 @@ public class PlayerController : MonoBehaviour
     // UI
     Text hptext;
     Text sheildtext;
-
+    // Effect
+    
     //½ºÅÈ °ü·Ã
     public float MAX_HP { get; set; } = 3000;
     public float MAX_SHIELD { get; set; } = 6000;
