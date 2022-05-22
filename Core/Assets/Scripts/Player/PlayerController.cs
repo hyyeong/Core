@@ -32,8 +32,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 600.0f;
     public float walkForce = 70.0f;
     public float maxWalkSpeed = 3.0f;
-    public float attack_speed = 1.0f;
-
+    public float attack_speed = 1f;
+    float attack_cool = 0;
     float hp ;
     float shield ;
     float mana ;
@@ -42,12 +42,18 @@ public class PlayerController : MonoBehaviour
     public int level { get; } = 1;
     double exp = 0;
 
-
+    // 스킬 관련
+    delegate void SkillSet();
+    SkillSet QSkill;
+    SkillSet WSkill;
+    SkillSet ESkill;
+    SkillSet RSkill;
+    SkillSet TSkill;
     void Start()
     {
         this.rigid2D = GetComponent<Rigidbody2D>(); // 물리객체 휙득
         this.animator = GetComponent<Animator>();
-        this.attackPos = PlayerAttack.transform;
+       // this.attackPos = PlayerAttack.transform;
         // UI 객체 휙득
         /*hptext = GameObject.Find("hpText").GetComponent<Text>();
         sheildtext = GameObject.Find("shieldText").GetComponent<Text>();*/
@@ -55,6 +61,12 @@ public class PlayerController : MonoBehaviour
         hp = MAX_HP;
         shield = MAX_SHIELD;
         mana = MAX_MANA;
+
+        QSkill = new SkillSet(EmptySkill);
+        WSkill = new SkillSet(EmptySkill);
+        ESkill = new SkillSet(EmptySkill);
+        RSkill = new SkillSet(EmptySkill);
+        TSkill = new SkillSet(EmptySkill);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -71,23 +83,27 @@ public class PlayerController : MonoBehaviour
         Attack();
         RecoveryShield(3);
         Die();
+        CheckSkill();
         // 속도 제한
         float speedx = Mathf.Abs(this.rigid2D.velocity.x);
         if (speedx < this.maxWalkSpeed)
         {
             this.rigid2D.AddForce(transform.right * key * this.walkForce*Time.deltaTime);
         }
+
         /*UIUpdate();*/
     }
 
 /* 캐릭터 행동 메소드*/
     void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) && attack_speed<=attack_cool)
         {
             /*Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<AttackController>().setDirection(transform.localScale.x);*/
             animator.SetTrigger("attack");
+            attack_cool = 0;
         }
+        attack_cool += (attack_cool <= 2) ? Time.deltaTime : 0;
     }
     private void Jump()
     {
@@ -130,12 +146,41 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("GameOver");
         }
     }
-    public float hp_ratio()
+    // Skill Check
+    void CheckSkill()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            QSkill();
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            WSkill();
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ESkill();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RSkill();
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TSkill();
+        }
+    }
+    // 스킬이 비어있는 경우
+    void EmptySkill()
+    {
+        Debug.Log("해당 스킬은 비어있습니다.");
+    }
+    public float HpRatio()
     {
         return (float)hp / MAX_HP;
     }
 
-    public float shield_ratio()
+    public float SheildRatio()
     {
         return (float)shield / MAX_SHIELD;
     }
