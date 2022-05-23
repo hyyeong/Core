@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     Transform attackPos;
 
-    public GameObject PlayerAttack;
+    public GameObject PlayerAttackPos;
     public GameObject AttackObject;
     // ÀÌµ¿ ¹æÇâ
     int key = 1;
@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     Text hptext;
     Text sheildtext;
     // Effect
-    
+    public GameObject healEffect;
+
     //½ºÅÈ °ü·Ã
     public float MAX_HP { get; set; } = 3000;
     public float MAX_SHIELD { get; set; } = 6000;
@@ -54,7 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         this.rigid2D = GetComponent<Rigidbody2D>(); // ¹°¸®°´Ã¼ È×µæ
         this.animator = GetComponent<Animator>();
-       // this.attackPos = PlayerAttack.transform;
+        this.attackPos = PlayerAttackPos.transform;
         // UI °´Ã¼ È×µæ
         /*hptext = GameObject.Find("hpText").GetComponent<Text>();
         sheildtext = GameObject.Find("shieldText").GetComponent<Text>();*/
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
         shield = MAX_SHIELD;
         mana = MAX_MANA;
 
-        QSkill = new SkillSet(EmptySkill);
+        QSkill = new SkillSet(SkillHeal);
         WSkill = new SkillSet(EmptySkill);
         ESkill = new SkillSet(EmptySkill);
         RSkill = new SkillSet(EmptySkill);
@@ -100,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) && attack_speed<=attack_cool)
         {
-            /*Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<AttackController>().setDirection(transform.localScale.x);*/
+            Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
             animator.SetTrigger("attack");
             attack_cool = 0;
         }
@@ -152,6 +153,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            animator.SetTrigger("isLookUp");
             QSkill();
         }
         if (Input.GetKeyDown(KeyCode.W))
@@ -175,6 +177,14 @@ public class PlayerController : MonoBehaviour
     void EmptySkill()
     {
         Debug.Log("ÇØ´ç ½ºÅ³Àº ºñ¾îÀÖ½À´Ï´Ù.");
+    }
+    // ½ºÅ³µé
+    void SkillHeal()
+    {
+        Quaternion rotate = Quaternion.Euler(-90, 0, 0);
+        Instantiate(healEffect, transform.position, rotate);
+        Debug.Log("Èú½ºÅ³");
+        
     }
     public float HpRatio()
     {
