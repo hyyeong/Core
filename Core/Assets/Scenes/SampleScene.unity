@@ -865,6 +865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerAttackPos: {fileID: 662072149}
   AttackObject: {fileID: 1545806602296978, guid: 9e4577abe56a95f4a91d29a0473cd30c, type: 3}
+  buffEffect: {fileID: 0}
   healEffect: {fileID: 100000, guid: ada5d62ffe762ce4fbccc70dcdbc9022, type: 3}
   jumpForce: 0.09
   walkForce: 1.35
@@ -879,6 +880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2112579042}
+  - component: {fileID: 2112579043}
   m_Layer: 0
   m_Name: BuffEffectGenerator
   m_TagString: Untagged
@@ -901,3 +903,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2112579043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112579041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 966ab7cbae497654c80c285e38cbae4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeStealEffect: {fileID: 100016, guid: 94f5722d0263cf946a95e30b8272c978, type: 3}
+  recoveryShieldEffect: {fileID: 100004, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}

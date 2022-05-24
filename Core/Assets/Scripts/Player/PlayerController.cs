@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject PlayerAttackPos;
     public GameObject AttackObject;
+    public BuffEffectGenerator buffEffect; // 버프 이펙트 관리
     // 이동 방향
     int key = 1;
 
@@ -53,8 +54,8 @@ public class PlayerController : MonoBehaviour
     SkillSet TSkill;
 
     public float qCoolTime { get; set; } = 3f; // 재사용 대기시간
-    public float wCoolTime { get; set; } = 3f;
-    public float eCoolTime { get; set; } = 3f;
+    public float wCoolTime { get; set; } = 30f;
+    public float eCoolTime { get; set; } = 30f;
     public float rCoolTime { get; set; } = 3f;
     public float tCoolTime { get; set; } = 3f;
     public float currentQCoolTime { get; set; } // 현재 재사용 대기시간
@@ -63,20 +64,26 @@ public class PlayerController : MonoBehaviour
     public float currentRCoolTime { get; set; }
     public float currentTCoolTime { get; set; }
 
+    public float qMana { get; set; } = 0f;
+    public float wMana { get; set; } = 0f;
+    public float eMana { get; set; } = 0f;
+    public float rMana { get; set; } = 0f;
+    public float tMana { get; set; } = 0f;
     // 버프 스킬 변수
     float lifeSteal = 0f;
     float recoveryShield = 0f;
 
     // 버프 스킬 관리 변수
     // 효과 종료시점 때문에 get 필수
-    float lifeStealTime { set; get; } = 0f;
-    float recoverySheildTime { set;  get; } = 0f;
+    public float lifeStealTime { set; get; } = 0f;
+    public float recoverySheildTime { set;  get; } = 0f;
     // 메소드
     void Start()
     {
         this.rigid2D = GetComponent<Rigidbody2D>(); // 물리객체 휙득
         this.animator = GetComponent<Animator>();
         this.attackPos = PlayerAttackPos.transform;
+        this.buffEffect = GameObject.Find("BuffEffectGenerator").GetComponent<BuffEffectGenerator>();
         // UI 객체 휙득
         /*hptext = GameObject.Find("hpText").GetComponent<Text>();
         sheildtext = GameObject.Find("shieldText").GetComponent<Text>();*/
@@ -207,34 +214,39 @@ public class PlayerController : MonoBehaviour
         currentECoolTime += Time.deltaTime;
         currentRCoolTime += Time.deltaTime;
         currentTCoolTime += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime >= qCoolTime)
+        if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime >= qCoolTime && mana>=qMana)
         {
             animator.SetTrigger("isLookUp");
             QSkill();
+            DecreaseMana(qMana);
             currentQCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime >= wCoolTime)
+        if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime >= wCoolTime && mana >= wMana)
         {
             animator.SetTrigger("isLookUp");
             WSkill();
+            DecreaseMana(wMana);
             currentWCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.E) && currentECoolTime >= eCoolTime)
+        if (Input.GetKeyDown(KeyCode.E) && currentECoolTime >= eCoolTime && mana >= eMana)
         {
             animator.SetTrigger("isLookUp");
             ESkill();
+            DecreaseMana(eMana);
             currentECoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime >= rCoolTime)
+        if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime >= rCoolTime && mana >= rMana)
         {
             animator.SetTrigger("isLookUp");
             RSkill();
+            DecreaseMana(rMana);
             currentRCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime >= tCoolTime)
+        if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime >= tCoolTime && mana >= tMana)
         {
             animator.SetTrigger("isLookUp");
             TSkill();
+            DecreaseMana(tMana);
             currentTCoolTime = 0f;
         }
     }
@@ -258,18 +270,25 @@ public class PlayerController : MonoBehaviour
         // 생명력 흡수 버프 
         lifeStealTime = 30f; // 30초
         lifeSteal = 0.1f; // 피해량 10%
+        buffEffect.LifeStealEffect(transform);
     }
     void SkillShieldRecovery()
     {
         // 쉴드 회복량 50%증가
         recoverySheildTime = 30f;
         recoveryShield = 0.5f;
+        buffEffect.RecoveryShieldEffect(transform);
     }
     public float HpRatio()
     {
         return (float)hp / MAX_HP;
     }
-
+    // 스텟 조절
+    public float DecreaseMana(float mana)
+    {
+        this.mana -= mana;
+        return mana;
+    }
     public float SheildRatio()
     {
         return (float)shield / MAX_SHIELD;
