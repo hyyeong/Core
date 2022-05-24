@@ -51,6 +51,27 @@ public class PlayerController : MonoBehaviour
     SkillSet ESkill;
     SkillSet RSkill;
     SkillSet TSkill;
+
+    public float qCoolTime { get; set; } = 3f; // 재사용 대기시간
+    public float wCoolTime { get; set; } = 3f;
+    public float eCoolTime { get; set; } = 3f;
+    public float rCoolTime { get; set; } = 3f;
+    public float tCoolTime { get; set; } = 3f;
+    public float currentQCoolTime { get; set; } // 현재 재사용 대기시간
+    public float currentWCoolTime { get; set; }
+    public float currentECoolTime { get; set; }
+    public float currentRCoolTime { get; set; }
+    public float currentTCoolTime { get; set; }
+
+    // 버프 스킬 변수
+    float lifeSteal = 0f;
+    float recoveryShield = 0f;
+
+    // 버프 스킬 관리 변수
+    // 효과 종료시점 때문에 get 필수
+    float lifeStealTime { set; get; } = 0f;
+    float recoverySheildTime { set;  get; } = 0f;
+    // 메소드
     void Start()
     {
         this.rigid2D = GetComponent<Rigidbody2D>(); // 물리객체 휙득
@@ -64,11 +85,22 @@ public class PlayerController : MonoBehaviour
         shield = MAX_SHIELD;
         mana = MAX_MANA;
 
+        // 스킬 설정
         QSkill = new SkillSet(SkillHeal);
-        WSkill = new SkillSet(EmptySkill);
-        ESkill = new SkillSet(EmptySkill);
+        WSkill = new SkillSet(SkillShieldRecovery);
+        ESkill = new SkillSet(SkillLifeSteal);
         RSkill = new SkillSet(EmptySkill);
         TSkill = new SkillSet(EmptySkill);
+
+        // 쿨다운 설정
+        currentQCoolTime = qCoolTime;
+        currentWCoolTime = wCoolTime;
+        currentECoolTime = eCoolTime;
+        currentRCoolTime = rCoolTime;
+        currentTCoolTime = tCoolTime;
+
+        // 코루틴 설정
+        StartCoroutine(ManageBuff());
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -96,6 +128,25 @@ public class PlayerController : MonoBehaviour
         /*UIUpdate();*/
     }
 
+    IEnumerator ManageBuff() // 코루틴 사용 버프관리
+    {
+        while (true)
+        {
+            lifeStealTime -= Time.deltaTime;
+            recoverySheildTime -= Time.deltaTime;
+
+            if (lifeStealTime < 0)
+            {
+                lifeSteal = 0f;
+            }
+            if (recoverySheildTime < 0)
+            {
+                recoveryShield = 0f;
+            }
+            
+            yield return new WaitForEndOfFrame();
+        }
+    }
 /* 캐릭터 행동 메소드*/
     void Attack()
     {
@@ -151,26 +202,40 @@ public class PlayerController : MonoBehaviour
     // Skill Check
     void CheckSkill()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        currentQCoolTime += Time.deltaTime;
+        currentWCoolTime += Time.deltaTime;
+        currentECoolTime += Time.deltaTime;
+        currentRCoolTime += Time.deltaTime;
+        currentTCoolTime += Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime >= qCoolTime)
         {
             animator.SetTrigger("isLookUp");
             QSkill();
+            currentQCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime >= wCoolTime)
         {
+            animator.SetTrigger("isLookUp");
             WSkill();
+            currentWCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && currentECoolTime >= eCoolTime)
         {
+            animator.SetTrigger("isLookUp");
             ESkill();
+            currentECoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime >= rCoolTime)
         {
+            animator.SetTrigger("isLookUp");
             RSkill();
+            currentRCoolTime = 0f;
         }
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime >= tCoolTime)
         {
+            animator.SetTrigger("isLookUp");
             TSkill();
+            currentTCoolTime = 0f;
         }
     }
     // 스킬이 비어있는 경우
@@ -179,12 +244,26 @@ public class PlayerController : MonoBehaviour
         Debug.Log("해당 스킬은 비어있습니다.");
     }
     // 스킬들
+    // 보조스킬
     void SkillHeal()
     {
+        // 공격력 * 2 만큼 회복
+        hp += atk_damage * 2;
         Quaternion rotate = Quaternion.Euler(-90, 0, 0);
         Instantiate(healEffect, transform.position, rotate);
         Debug.Log("힐스킬");
-        
+    }
+    void SkillLifeSteal()
+    {
+        // 생명력 흡수 버프 
+        lifeStealTime = 30f; // 30초
+        lifeSteal = 0.1f; // 피해량 10%
+    }
+    void SkillShieldRecovery()
+    {
+        // 쉴드 회복량 50%증가
+        recoverySheildTime = 30f;
+        recoveryShield = 0.5f;
     }
     public float HpRatio()
     {
@@ -218,7 +297,11 @@ public class PlayerController : MonoBehaviour
     {
         if (shield < MAX_SHIELD)
         {
-            shield += amount;
+            shield = shield + amount * (1f + recoveryShield);
+        }
+        else
+        {
+            shield = MAX_SHIELD;
         }
     }
 }
