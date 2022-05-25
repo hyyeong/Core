@@ -867,6 +867,7 @@ MonoBehaviour:
   AttackObject: {fileID: 1545806602296978, guid: 9e4577abe56a95f4a91d29a0473cd30c, type: 3}
   buffEffect: {fileID: 0}
   healEffect: {fileID: 100000, guid: ada5d62ffe762ce4fbccc70dcdbc9022, type: 3}
+  blinkEffect: {fileID: 100018, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
   jumpForce: 0.09
   walkForce: 1.35
   maxWalkSpeed: 3
@@ -917,3 +918,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeStealEffect: {fileID: 100016, guid: 94f5722d0263cf946a95e30b8272c978, type: 3}
   recoveryShieldEffect: {fileID: 100004, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+  araEffect: {fileID: 100016, guid: 29af8d70388777e4484c46eb0c38b74c, type: 3}
+  concentrationEffect: {fileID: 1781930563638536, guid: daa6cceb1b087d74aad6916dac2805ea, type: 3}
+  recyclingEffect: {fileID: 1844191813266838, guid: 968c924d2be019d4b9e67647551eec3e, type: 3}
