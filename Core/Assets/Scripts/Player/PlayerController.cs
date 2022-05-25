@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     Text sheildtext;
     // Effect
     public GameObject healEffect;
+    public GameObject blinkEffect;
 
     //스탯 관련
     public float MAX_HP { get; set; } = 3000;
@@ -52,9 +53,9 @@ public class PlayerController : MonoBehaviour
     SkillSet ESkill;
     SkillSet RSkill;
     SkillSet TSkill;
-
+    // 재사용대기시간은 스킬을 고를떄 관리하기
     public float qCoolTime { get; set; } = 3f; // 재사용 대기시간
-    public float wCoolTime { get; set; } = 30f;
+    public float wCoolTime { get; set; } = 2f;
     public float eCoolTime { get; set; } = 30f;
     public float rCoolTime { get; set; } = 3f;
     public float tCoolTime { get; set; } = 3f;
@@ -70,13 +71,18 @@ public class PlayerController : MonoBehaviour
     public float rMana { get; set; } = 0f;
     public float tMana { get; set; } = 0f;
     // 버프 스킬 변수
-    float lifeSteal = 0f;
+    float lifeSteal = 0f; // 대미지 넣을 때 구현하기
     float recoveryShield = 0f;
-
+    float ara = 1f;
+    float concentration = 1f; //대미지 넣을때 구현하기
+    float recycling = 0f;
     // 버프 스킬 관리 변수
     // 효과 종료시점 때문에 get 필수
     public float lifeStealTime { set; get; } = 0f;
     public float recoverySheildTime { set;  get; } = 0f;
+    public float araTime { set; get; } = 0f;
+    public float concentrationTime { set; get; } = 0f;
+    public float recyclingTime { set; get; } = 0f;
     // 메소드
     void Start()
     {
@@ -93,11 +99,11 @@ public class PlayerController : MonoBehaviour
         mana = MAX_MANA;
 
         // 스킬 설정
-        QSkill = new SkillSet(SkillHeal);
-        WSkill = new SkillSet(SkillShieldRecovery);
+        QSkill = new SkillSet(SkillRecycling);
+        WSkill = new SkillSet(SkillBlink);
         ESkill = new SkillSet(SkillLifeSteal);
-        RSkill = new SkillSet(EmptySkill);
-        TSkill = new SkillSet(EmptySkill);
+        RSkill = new SkillSet(SkillAra);
+        TSkill = new SkillSet(SkillConcentration);
 
         // 쿨다운 설정
         currentQCoolTime = qCoolTime;
@@ -122,7 +128,8 @@ public class PlayerController : MonoBehaviour
         CheckRun();
         // 공격 체크
         Attack();
-        RecoveryShield(3);
+        RecoveryShield(3f * Time.deltaTime);
+        RecoveryMana(1f * Time.deltaTime);
         Die();
         CheckSkill();
         // 속도 제한
@@ -141,7 +148,9 @@ public class PlayerController : MonoBehaviour
         {
             lifeStealTime -= Time.deltaTime;
             recoverySheildTime -= Time.deltaTime;
-
+            araTime -= Time.deltaTime;
+            recyclingTime -= Time.deltaTime;
+            concentrationTime -= Time.deltaTime;
             if (lifeStealTime < 0)
             {
                 lifeSteal = 0f;
@@ -150,7 +159,18 @@ public class PlayerController : MonoBehaviour
             {
                 recoveryShield = 0f;
             }
-            
+            if (araTime < 0)
+            {
+                ara = 1f;
+            }
+            if (recyclingTime < 0)
+            {
+                recycling = 0f;
+            }
+            if (concentrationTime < 0)
+            {
+                concentration = 1f;
+            }
             yield return new WaitForEndOfFrame();
         }
     }
@@ -172,7 +192,7 @@ public class PlayerController : MonoBehaviour
             ++isJump;
             float plusJumpForce = 1;
             if (isJump == 2) plusJumpForce = 1.5f;
-            this.rigid2D.AddForce(Vector2.up * this.jumpForce * plusJumpForce);
+            this.rigid2D.AddForce(Vector2.up * this.jumpForce * plusJumpForce *ara);
             animator.SetBool("isJump", true);
         }
     }
@@ -279,6 +299,37 @@ public class PlayerController : MonoBehaviour
         recoveryShield = 0.5f;
         buffEffect.RecoveryShieldEffect(transform);
     }
+    void SkillAra()
+    {
+        // 점프 량 25%증가
+        araTime = 30f;
+        ara = 1.25f;
+        buffEffect.AraEffect(transform);
+    }
+    void SkillRecycling()
+    {
+        // 잃은마나 1% 회복
+        recyclingTime = 30f;
+        recycling = 0.01f;
+        buffEffect.RecyclingEffect(transform);
+    }
+    void SkillConcentration()
+    {
+        // 가하는대미지 1.5배
+        concentrationTime = 30f;
+        concentration = 1.5f;
+        buffEffect.ConcentrationEffect(transform);
+    }
+    void SkillBlink()
+    {
+        // 짧은거리 순간이동
+        float dir = transform.localScale.x > 0 ? 1 : -1;
+        Vector3 newLocation = transform.position + new Vector3(dir*4f,0,0);
+        Instantiate(blinkEffect, transform.position, transform.rotation);
+        transform.position = newLocation;
+        Instantiate(blinkEffect, transform.position, transform.rotation);
+        Debug.Log("블링크 스킬");
+    }
     public float HpRatio()
     {
         return (float)hp / MAX_HP;
@@ -312,7 +363,7 @@ public class PlayerController : MonoBehaviour
             shield -= dam;
         }
     }
-    void RecoveryShield(float amount = 1)
+    void RecoveryShield(float amount = 0.5f)
     {
         if (shield < MAX_SHIELD)
         {
@@ -321,6 +372,18 @@ public class PlayerController : MonoBehaviour
         else
         {
             shield = MAX_SHIELD;
+        }
+    }
+    void RecoveryMana(float amount = 0.5f)
+    {
+        if (mana < MAX_MANA)
+        {
+            mana += amount * (1f);
+            mana += (MAX_MANA - mana) * recycling * Time.deltaTime; // 잃은마나
+        }
+        else
+        {
+            mana = MAX_MANA;
         }
     }
 }
