@@ -3,7 +3,12 @@ guid: b1b9f25ec5e740a4eb241fde1d4b6b94
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - PlayerAttackPos: {instanceID: 0}
+  - AttackObject: {instanceID: 0}
+  - buffEffect: {instanceID: 0}
+  - healEffect: {fileID: 100000, guid: ada5d62ffe762ce4fbccc70dcdbc9022, type: 3}
+  - blinkEffect: {fileID: 100018, guid: a40b64bf23366dc42a892af2c6ff6140, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
