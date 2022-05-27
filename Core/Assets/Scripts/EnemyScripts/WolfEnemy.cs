@@ -8,7 +8,6 @@ public class WolfEnemy : MonoBehaviour
     public GameObject canvas;
 
     RectTransform hpBar;
-
     public float height = 1.7f;
 
     // Start is called before the first frame update
@@ -20,9 +19,6 @@ public class WolfEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, target.position);
-
-
         Vector3 _hpBarPos = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y + height, 0));
         hpBar.position = _hpBarPos;
     }
