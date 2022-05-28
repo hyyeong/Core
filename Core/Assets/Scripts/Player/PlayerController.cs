@@ -27,6 +27,11 @@ public class PlayerController : MonoBehaviour
     // Effect
     public GameObject healEffect;
     public GameObject blinkEffect;
+    // AttackMagic Skill Effect
+    public GameObject magicArrowEffect;
+    public GameObject lightningBallEffect;
+    public GameObject lightningArrowEffect;
+    public GameObject artifficialSunEffect;
 
     //스탯 관련
     public float MAX_HP { get; set; } = 3000;
@@ -41,7 +46,8 @@ public class PlayerController : MonoBehaviour
     float hp ;
     float shield ;
     float mana ;
-
+    // 스탯과 패시브
+    float elemental_atk = 1f;
     //환경( 경험치, 레벨 등)
     public int level { get; } = 1;
     double exp = 0;
@@ -56,7 +62,7 @@ public class PlayerController : MonoBehaviour
     // 재사용대기시간은 스킬을 고를떄 관리하기
     public float qCoolTime { get; set; } = 3f; // 재사용 대기시간
     public float wCoolTime { get; set; } = 2f;
-    public float eCoolTime { get; set; } = 30f;
+    public float eCoolTime { get; set; } = 3f;
     public float rCoolTime { get; set; } = 3f;
     public float tCoolTime { get; set; } = 3f;
     public float currentQCoolTime { get; set; } // 현재 재사용 대기시간
@@ -99,10 +105,10 @@ public class PlayerController : MonoBehaviour
         mana = MAX_MANA;
 
         // 스킬 설정
-        QSkill = new SkillSet(SkillRecycling);
-        WSkill = new SkillSet(SkillBlink);
-        ESkill = new SkillSet(SkillLifeSteal);
-        RSkill = new SkillSet(SkillAra);
+        QSkill = new SkillSet(SkillMagicArrow);
+        WSkill = new SkillSet(SkillLightningBall);
+        ESkill = new SkillSet(SkillLightningArrow);
+        RSkill = new SkillSet(SkillArtifficialSun);
         TSkill = new SkillSet(SkillConcentration);
 
         // 쿨다운 설정
@@ -329,6 +335,45 @@ public class PlayerController : MonoBehaviour
         transform.position = newLocation;
         Instantiate(blinkEffect, transform.position, transform.rotation);
         Debug.Log("블링크 스킬");
+    }
+    // Attack Magic Skill
+    void SkillMagicArrow()
+    {
+        // 공격력 X 2의 데미지
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(magicArrowEffect, attackPos.position, effectRotation);
+        skillEffect.GetComponent<MagicArrowController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<MagicArrowController>().damage = atk_damage * 2f;
+        animator.SetTrigger("attack");
+    }
+    void SkillLightningBall()
+    {
+        // 공격력 X 1.75의 데미지
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(lightningBallEffect, attackPos.position, effectRotation);
+        skillEffect.GetComponent<LightningBallController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<LightningBallController>().damage = atk_damage * 1.75f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    void SkillLightningArrow()
+    {
+        // 공격력 X 3.5의 데미지
+        float dir = transform.localScale.x > 0 ? -45f : 45f; 
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation);
+        skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<LightningArrowController>().damage = atk_damage * 3.5f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    void SkillArtifficialSun()
+    {
+        // 공격력 X 5의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(artifficialSunEffect, attackPos.position + new Vector3(5f * dir, 15f, 0), effectRotation);
+        skillEffect.GetComponent<ArtifficialSunController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<ArtifficialSunController>().damage = atk_damage * 5f * elemental_atk;
+        animator.SetTrigger("attack");
     }
     public float HpRatio()
     {
