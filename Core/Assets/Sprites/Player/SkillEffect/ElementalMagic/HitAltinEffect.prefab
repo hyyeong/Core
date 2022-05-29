@@ -14373,9 +14373,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400006}
-  - component: {fileID: 114000011644435202}
+  - component: {fileID: 6640415693711012852}
   m_Layer: 0
-  m_Name: Explode6
+  m_Name: HitAltinEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14399,7 +14399,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114000011644435202
+--- !u!114 &6640415693711012852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14408,6 +14408,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7794c33cb087bc44947938f6f33fe47, type: 3}
+  m_Script: {fileID: 11500000, guid: 78557a31ee3b48a4ba39e4cf4324687f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifeTime: 2
