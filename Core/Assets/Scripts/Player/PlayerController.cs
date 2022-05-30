@@ -55,8 +55,8 @@ public class PlayerController : MonoBehaviour
     public float elemental_atk { set; get; } = 1f;
     public float magic_atk { set; get; } = 0f;
     //환경( 경험치, 레벨 등)
-    public int level { get; } = 1;
-    double exp = 0;
+    public int level { get; set; } = 1;
+    float exp = 0;
 
     // 스킬 관련
     delegate void SkillSet();
@@ -433,8 +433,8 @@ public class PlayerController : MonoBehaviour
         float dir = transform.localScale.x > 0 ? 1f : -1f;
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(holyEffect, attackPos.position + new Vector3(0, 0f, 0), effectRotation);
-        skillEffect.GetComponent<AltinController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<AltinController>().damage = atk_damage * (5.5f + magic_atk);
+        skillEffect.GetComponent<HolyController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<HolyController>().damage = atk_damage * (5.5f + magic_atk);
         animator.SetTrigger("attack");
     }
 
@@ -469,6 +469,16 @@ public class PlayerController : MonoBehaviour
         else
         {
             shield -= dam;
+        }
+    }
+    void IncreaseExp(float exp_)
+    {
+        this.exp += exp_;
+        //레벨당 요구경험치  50씩 추가
+        if (exp > 50 + 50*level)
+        {
+            exp -= 50 + 50 * level;
+            level += 1;
         }
     }
     void RecoveryShield(float amount = 0.5f)
