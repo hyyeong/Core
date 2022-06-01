@@ -7,6 +7,7 @@ public class SkillSlot : MonoBehaviour, IDropHandler
 {
     public Image skillImage;
     public DragAndDropContainer dragAndDropContainer;
+    public PlayerController player;
     void Start()
     {
         
@@ -19,8 +20,10 @@ public class SkillSlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(eventData);
+        player.QSkill = dragAndDropContainer.skillfunc; // 스킬 지정
+        player.qMana = dragAndDropContainer.mana;
         skillImage.sprite = dragAndDropContainer.image.sprite;
+        player.qCoolTime = dragAndDropContainer.cooltime;
         dragAndDropContainer.image.sprite = null;
     }
 }

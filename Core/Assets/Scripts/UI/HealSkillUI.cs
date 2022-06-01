@@ -9,22 +9,31 @@ public class HealSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public Image skillImage;
     public DragAndDropContainer dragAndDropContainer;
     public Button btn;
+    public PlayerController player;
+    public PlayerController.SkillSet skillfunc;
+    // 스킬 정보
+    public float mana = 0;
+    public float cooltime = 0f;
     bool isDragging = false;
     void Start()
     {
         skillImage = btn.image;
+        skillfunc = player.SkillHeal;
+
     }
 
     void Update()
     {
         
     }
-
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // 데이터 담기
         dragAndDropContainer.gameObject.SetActive(true);
-        // Set Data 
+        dragAndDropContainer.mana = mana;
         dragAndDropContainer.image.sprite = skillImage.sprite;
+        dragAndDropContainer.cooltime = cooltime;
+        dragAndDropContainer.skillfunc = skillfunc;
         isDragging = true;
     }
 
@@ -39,9 +48,11 @@ public class HealSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public void OnEndDrag(PointerEventData eventData)
     {
         isDragging = false;
-        // Reset Contatiner
+        // 리셋
         dragAndDropContainer.image.sprite = null;
         dragAndDropContainer.transform.position = new Vector3(0, 0, 0);
+        dragAndDropContainer.mana = 0;
+        dragAndDropContainer.skillfunc = null;
         dragAndDropContainer.gameObject.SetActive(false);
     }
     // 드롭 오브젝트에서 발생
