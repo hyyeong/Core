@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Global;
 
+namespace Global
+{
+    public delegate void SkillSet();
+}
 public class PlayerController : MonoBehaviour
 {
+
+    public delegate void SkillSet();
     // 좌표, 에니메이터 등
     Rigidbody2D rigid2D;
     Animator animator;
@@ -27,6 +34,16 @@ public class PlayerController : MonoBehaviour
     // Effect
     public GameObject healEffect;
     public GameObject blinkEffect;
+    // AttackMagic Skill Effect
+    public GameObject magicArrowEffect;
+    public GameObject magicCircleEffect;
+    public GameObject altinEffect;
+    public GameObject holyEffect;
+    public GameObject lightningBallEffect;
+    public GameObject lightningArrowEffect;
+    public GameObject artifficialSunEffect;
+    public GameObject fireShieldEffect;
+    public GameObject blizzardEffect;
 
     //스탯 관련
     public float MAX_HP { get; set; } = 3000;
@@ -41,22 +58,23 @@ public class PlayerController : MonoBehaviour
     float hp ;
     float shield ;
     float mana ;
-
+    // 스탯과 패시브
+    public float elemental_atk { set; get; } = 1f;
+    public float magic_atk { set; get; } = 0f;
     //환경( 경험치, 레벨 등)
-    public int level { get; } = 1;
-    double exp = 0;
+    public int level { get; set; } = 1;
+    float exp = 0;
 
     // 스킬 관련
-    delegate void SkillSet();
-    SkillSet QSkill;
-    SkillSet WSkill;
-    SkillSet ESkill;
-    SkillSet RSkill;
-    SkillSet TSkill;
+    public SkillSet QSkill { set; get; }
+    public SkillSet WSkill { set; get; }
+    public SkillSet ESkill { set; get; }
+    public SkillSet RSkill { set; get; }
+    public SkillSet TSkill { set; get; }
     // 재사용대기시간은 스킬을 고를떄 관리하기
     public float qCoolTime { get; set; } = 3f; // 재사용 대기시간
     public float wCoolTime { get; set; } = 2f;
-    public float eCoolTime { get; set; } = 30f;
+    public float eCoolTime { get; set; } = 3f;
     public float rCoolTime { get; set; } = 3f;
     public float tCoolTime { get; set; } = 3f;
     public float currentQCoolTime { get; set; } // 현재 재사용 대기시간
@@ -99,12 +117,11 @@ public class PlayerController : MonoBehaviour
         mana = MAX_MANA;
 
         // 스킬 설정
-        QSkill = new SkillSet(SkillRecycling);
-        WSkill = new SkillSet(SkillBlink);
-        ESkill = new SkillSet(SkillLifeSteal);
-        RSkill = new SkillSet(SkillAra);
-        TSkill = new SkillSet(SkillConcentration);
-
+        QSkill = new SkillSet(EmptySkill);
+        WSkill = new SkillSet(SkillFireSheild);
+        ESkill = new SkillSet(SkillHoly);
+        RSkill = new SkillSet(SkillAltin);
+        TSkill = new SkillSet(SkillMagicCircle);
         // 쿨다운 설정
         currentQCoolTime = qCoolTime;
         currentWCoolTime = wCoolTime;
@@ -174,6 +191,11 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    public void getSkillHeal()
+    {
+        Debug.Log("장착");
+        GameObject.Find("HealSkill").GetComponent<HealSkillUI>().skillfunc=SkillHeal;
+    }
 /* 캐릭터 행동 메소드*/
     void Attack()
     {
@@ -205,7 +227,6 @@ public class PlayerController : MonoBehaviour
             key = 1;
             if (!animator.GetBool("isJump"))
                 animator.SetBool("isRun", true);
-            Debug.Log($"우로 이동 key : {key}");
             transform.localScale = new Vector3(key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
@@ -213,7 +234,6 @@ public class PlayerController : MonoBehaviour
             key = -1;
             if (!animator.GetBool("isJump"))
                 animator.SetBool("isRun", true);
-            Debug.Log($"좌로 이동 key : {key}");
             transform.localScale = new Vector3(key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
 
@@ -277,7 +297,7 @@ public class PlayerController : MonoBehaviour
     }
     // 스킬들
     // 보조스킬
-    void SkillHeal()
+    public void SkillHeal()
     {
         // 공격력 * 2 만큼 회복
         hp += atk_damage * 2;
@@ -285,42 +305,42 @@ public class PlayerController : MonoBehaviour
         Instantiate(healEffect, transform.position, rotate);
         Debug.Log("힐스킬");
     }
-    void SkillLifeSteal()
+    public void SkillLifeSteal()
     {
         // 생명력 흡수 버프 
         lifeStealTime = 30f; // 30초
         lifeSteal = 0.1f; // 피해량 10%
         buffEffect.LifeStealEffect(transform);
     }
-    void SkillShieldRecovery()
+    public void SkillShieldRecovery()
     {
         // 쉴드 회복량 50%증가
         recoverySheildTime = 30f;
         recoveryShield = 0.5f;
         buffEffect.RecoveryShieldEffect(transform);
     }
-    void SkillAra()
+    public void SkillAra()
     {
         // 점프 량 25%증가
         araTime = 30f;
         ara = 1.25f;
         buffEffect.AraEffect(transform);
     }
-    void SkillRecycling()
+    public void SkillRecycling()
     {
         // 잃은마나 1% 회복
         recyclingTime = 30f;
         recycling = 0.01f;
         buffEffect.RecyclingEffect(transform);
     }
-    void SkillConcentration()
+    public void SkillConcentration()
     {
         // 가하는대미지 1.5배
         concentrationTime = 30f;
         concentration = 1.5f;
         buffEffect.ConcentrationEffect(transform);
     }
-    void SkillBlink()
+    public void SkillBlink()
     {
         // 짧은거리 순간이동
         float dir = transform.localScale.x > 0 ? 1 : -1;
@@ -330,6 +350,102 @@ public class PlayerController : MonoBehaviour
         Instantiate(blinkEffect, transform.position, transform.rotation);
         Debug.Log("블링크 스킬");
     }
+    // Attack Magic Skill
+    public void SkillMagicArrow()
+    {
+        // 공격력 X 2의 데미지
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(magicArrowEffect, attackPos.position, effectRotation);
+        skillEffect.GetComponent<MagicArrowController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<MagicArrowController>().damage = atk_damage * (2f+magic_atk);
+        animator.SetTrigger("attack");
+    }
+    public void SkillLightningBall()
+    {
+        // 공격력 X 1.75의 데미지
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(lightningBallEffect, attackPos.position, effectRotation);
+        skillEffect.GetComponent<LightningBallController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<LightningBallController>().damage = atk_damage * 1.75f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    public void SkillLightningArrow()
+    {
+        // 공격력 X 3.5의 데미지
+        float dir = transform.localScale.x > 0 ? -45f : 45f; 
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation);
+        skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<LightningArrowController>().damage = atk_damage * 3.5f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    public void SkillArtifficialSun()
+    {
+        // 공격력 X 5의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(artifficialSunEffect, attackPos.position + new Vector3(5f * dir, 15f, 0), effectRotation);
+        skillEffect.GetComponent<ArtifficialSunController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<ArtifficialSunController>().damage = atk_damage * 5f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    public void SkillFireSheild()
+    {
+        // 공격력 X 1.5의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(fireShieldEffect, attackPos.position + new Vector3(0f,0f, 0), effectRotation);
+        skillEffect.GetComponent<FireShieldController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<FireShieldController>().damage = atk_damage * 1.5f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+    public void SkillBlizzard()
+    {
+        // 공격력 X 2의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(blizzardEffect, attackPos.position + new Vector3(dir*15f, 5f, 0), effectRotation);
+        skillEffect.GetComponent<BlizzardController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<BlizzardController>().damage = atk_damage * 2f * elemental_atk;
+        animator.SetTrigger("attack");
+    }
+
+    public void SkillMagicCircle()
+    {
+        // 공격력 X 2의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(magicCircleEffect, attackPos.position + new Vector3(0, 5f, 0), effectRotation);
+        skillEffect.GetComponent<MagicCircleController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<MagicCircleController>().damage = atk_damage * (2f + magic_atk);
+        animator.SetTrigger("attack");
+    }
+
+    public void SkillAltin()
+    {
+        // 공격력 X 2.5의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        for (int i = 0; i < 5; i++)
+        {
+            Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir*12.5f*i)); // 쿼터니언 오일러각 사용
+            GameObject skillEffect = Instantiate(altinEffect, attackPos.position + new Vector3(0, 2f, 0), effectRotation);
+            skillEffect.GetComponent<AltinController>().setDirection(transform.localScale.x);
+            skillEffect.GetComponent<AltinController>().damage = atk_damage * (2.5f + magic_atk);
+        }
+        animator.SetTrigger("attack");
+    }
+
+    public void SkillHoly()
+    {
+        // 공격력 X 5.5의 데미지
+        float dir = transform.localScale.x > 0 ? 1f : -1f;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+        GameObject skillEffect = Instantiate(holyEffect, attackPos.position + new Vector3(0, 0f, 0), effectRotation);
+        skillEffect.GetComponent<HolyController>().setDirection(transform.localScale.x);
+        skillEffect.GetComponent<HolyController>().damage = atk_damage * (5.5f + magic_atk);
+        animator.SetTrigger("attack");
+    }
+
     public float HpRatio()
     {
         return (float)hp / MAX_HP;
@@ -361,6 +477,16 @@ public class PlayerController : MonoBehaviour
         else
         {
             shield -= dam;
+        }
+    }
+    void IncreaseExp(float exp_)
+    {
+        this.exp += exp_;
+        //레벨당 요구경험치  50씩 추가
+        if (exp > 50 + 50*level)
+        {
+            exp -= 50 + 50 * level;
+            level += 1;
         }
     }
     void RecoveryShield(float amount = 0.5f)
