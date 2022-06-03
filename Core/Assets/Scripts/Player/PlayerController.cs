@@ -12,6 +12,7 @@ namespace Global
 public class PlayerController : MonoBehaviour
 {
 
+    public static float BGspeed = 0.0f;
     public delegate void SkillSet();
     // 좌표, 에니메이터 등
     Rigidbody2D rigid2D;
@@ -151,6 +152,7 @@ public class PlayerController : MonoBehaviour
         CheckSkill();
         // 속도 제한
         float speedx = Mathf.Abs(this.rigid2D.velocity.x);
+        BGspeed = (speedx > 0f) ? 0.1f * key : 0f;
         if (speedx < this.maxWalkSpeed)
         {
             this.rigid2D.AddForce(transform.right * key * this.walkForce*Time.deltaTime);
