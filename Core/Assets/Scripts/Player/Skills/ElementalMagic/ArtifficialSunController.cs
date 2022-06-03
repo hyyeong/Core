@@ -16,7 +16,7 @@ public class ArtifficialSunController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //적이 타격된경우
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Map"))
         {
             //적에게 대미지 처리
             Vector3 hitPos = transform.position + new Vector3(0, 0, 0);

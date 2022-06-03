@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 19800000}
   - component: {fileID: 19900000}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4755,8 +4755,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -4799,7 +4799,7 @@ GameObject:
   - component: {fileID: 400002}
   - component: {fileID: 19800002}
   - component: {fileID: 19900002}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9543,8 +9543,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 1
   m_MeshDistribution: 0
@@ -9587,7 +9587,7 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 19800004}
   - component: {fileID: 19900004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14331,8 +14331,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -14375,7 +14375,7 @@ GameObject:
   - component: {fileID: 400006}
   - component: {fileID: 19800006}
   - component: {fileID: 19900006}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Spark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19119,8 +19119,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 1
   m_MeshDistribution: 0
@@ -19163,7 +19163,7 @@ GameObject:
   - component: {fileID: 400008}
   - component: {fileID: 19800008}
   - component: {fileID: 19900008}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Kunai
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23907,8 +23907,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 4
   m_MeshDistribution: 0
@@ -23951,7 +23951,7 @@ GameObject:
   - component: {fileID: 400010}
   - component: {fileID: 19800010}
   - component: {fileID: 19900010}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CoreLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28695,8 +28695,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -237229461
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -28739,7 +28739,7 @@ GameObject:
   - component: {fileID: 400012}
   - component: {fileID: 6510061438557375142}
   - component: {fileID: 3859888389536726192}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Altin
   m_TagString: Untagged
   m_Icon: {fileID: 0}

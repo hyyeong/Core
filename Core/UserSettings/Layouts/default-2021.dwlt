@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 23
+  controlID: 17
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 28
+  controlID: 18
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 29
+  controlID: 19
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -428,24 +428,24 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 226}
+      scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 6c61ffff0678ffffb497ffff669fffffdea6ffffe6aeffff24edffff28fbffffbe6c0000e26c0000166d0000aa6d0000de6d0000f4830000328400007a840000f48400005e85000088850000c4850000
+      m_ExpandedIDs: 68b1ffffd2e8ffff88efffff04f0ffff28fbffffe8a400008ca50000a4b40000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: MagicEnforce
-        m_OriginalName: MagicEnforce
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -61088
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -735,9 +735,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 832.08795, y: 585.42096, z: -0.5583751}
+    m_Target: {x: 18.790424, y: 6.5591617, z: 1.3255357}
     speed: 2
-    m_Value: {x: 831.5199, y: 601.46783, z: -0.8125692}
+    m_Value: {x: 18.867119, y: 6.791642, z: 1.3126653}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -788,9 +788,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 539.45624
+    m_Target: 27.313643
     speed: 2
-    m_Value: 564.8757
+    m_Value: 28.600674
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -808,7 +808,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewRotation: {x: -0.06925162, y: -0.008382874, z: 0.00058181613, w: -0.997563}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -920,33 +920,33 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts/Player/Skills/SubMagic
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/SpellBookPreface
+  - Assets/Scripts/Player/Skills/SubMagic
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Unity\Core\Core
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 3c740000
-    m_LastClickedID: 29756
-    m_ExpandedIDs: 000000003c7400003e740000407400004274000046740000487400004a7400004c7400004e74000050740000527400005474000056740000587400005a740000627400006474000066740000687400006c7400006e7400007074000072740000747400007674000078740000807400008274000084740000867400008a7400008e7400009274000094740000f47500005c760000348100005c8100008481000094810000fa850000ce880000608a00006c8a000000ca9a3b
+    scrollPos: {x: 0, y: 122}
+    m_SelectedIDs: 2c980000
+    m_LastClickedID: 38956
+    m_ExpandedIDs: 00000000c2770000c4770000c6770000c8770000ca770000cc770000ce770000d0770000d2770000d4770000d6770000d8770000da770000dc770000de770000e0770000e2770000e4770000e6770000e8770000ea770000ec770000ee770000f0770000f2770000f4770000f6770000f8770000fa770000fc770000fe77000000780000027800000478000006780000087800000a7800000c7800000e78000010780000127800001478000016780000187800005e79000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Blink
-      m_OriginalName: Blink
+      m_Name: SkillIcon
+      m_OriginalName: SkillIcon
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 33182
+      m_UserData: 31080
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
       m_OriginalEventType: 0
@@ -963,7 +963,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003c7400003e74000040740000427400004474000046740000487400004a7400004c7400004e74000050740000527400005474000056740000587400005a7400005c7400005e74000060740000627400006474000066740000687400006a7400006c7400006e74000070740000727400007474000076740000787400007a7400007c7400007e74000080740000827400008474000086740000887400008a7400008c7400008e74000090740000927400009474000096740000
+    m_ExpandedIDs: 00000000c2770000c4770000c6770000c8770000ca770000cc770000ce770000d0770000d2770000d4770000d6770000d8770000da770000dc770000de770000e0770000e2770000e4770000e6770000e8770000ea770000ec770000ee770000f0770000f2770000f4770000f6770000f8770000fa770000fc770000fe77000000780000027800000478000006780000087800000a7800000c7800000e7800001078000012780000147800001678000018780000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -991,7 +991,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000e86b00008ea70000909d0000
+    m_ExpandedInstanceIDs: c6230000e86b00008ea70000909d000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
