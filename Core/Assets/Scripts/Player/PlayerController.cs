@@ -53,9 +53,10 @@ public class PlayerController : MonoBehaviour
     public float atk_damage { get; set; } = 1000;
     public float jumpForce = 600.0f;
     public float walkForce = 70.0f;
-    public float maxWalkSpeed = 3.0f;
-    public float attack_speed = 1f;
-    float attack_cool = 0;
+    public float maxWalkSpeed { set; get; } = 3.0f;
+    public float attack_speed { set; get; } = 1f;
+    public float attack_cool { set; get; } = 0;
+    public float armor { set; get; } = 0;
     float hp ;
     float shield ;
     float mana ;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     float exp = 0;
 
     // 스킬 관련
+    public int skillPoints = 10;
     public SkillSet QSkill { set; get; }
     public SkillSet WSkill { set; get; }
     public SkillSet ESkill { set; get; }

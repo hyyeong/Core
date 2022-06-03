@@ -10,7 +10,7 @@ public class HolyController : MonoBehaviour
 
     float life = 0f;
     float direction = 1f;
-    const float LIFETIME = 1.5f;
+    const float LIFETIME = 1.0f;
 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -20,7 +20,6 @@ public class HolyController : MonoBehaviour
     void Update()
     {
         life += Time.deltaTime;
-        this.transform.Translate(direction * speed * Time.deltaTime, 0, 0);
         if (life >= LIFETIME)
             Destroy(this.gameObject);
     }

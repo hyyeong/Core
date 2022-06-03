@@ -9,12 +9,14 @@ public class HealSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     public Image skillImage;
     public DragAndDropContainer dragAndDropContainer;
     public Button btn;
-    public PlayerController player;
-    public PlayerController.SkillSet skillfunc;
+    public PlayerController.SkillSet skillfunc; //스킬을 담을 delegate
+
     // 스킬 정보
     public float mana = 0;
     public float cooltime = 0f;
     bool isDragging = false;
+    public PlayerController player;
+
     void Start()
     {
         skillImage = btn.image;
