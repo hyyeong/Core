@@ -57,12 +57,17 @@ public class PlayerController : MonoBehaviour
     public float attack_speed { set; get; } = 1f;
     public float attack_cool { set; get; } = 0;
     public float armor { set; get; } = 0;
+    public float recoverySheildPerSec { set; get; } = 10f;
+    public float recoveryManaPerSec { set; get; } = 10f;
+    public float manaDrain { set; get; } = 0;
+    public float cycle { set; get; } = 1f; // 마나소모량 비율
     float hp ;
     float shield ;
     float mana ;
     // 스탯과 패시브
     public float elemental_atk { set; get; } = 1f;
     public float magic_atk { set; get; } = 0f;
+    public bool arcana { set; get; } = false;
     //환경( 경험치, 레벨 등)
     public int level { get; set; } = 1;
     float exp = 0;
@@ -148,13 +153,13 @@ public class PlayerController : MonoBehaviour
         CheckRun();
         // 공격 체크
         Attack();
-        RecoveryShield(3f * Time.deltaTime);
-        RecoveryMana(1f * Time.deltaTime);
+        RecoveryShield(recoverySheildPerSec * Time.deltaTime);
+        RecoveryMana(recoveryManaPerSec * Time.deltaTime);
         Die();
         CheckSkill();
         // 속도 제한
         float speedx = Mathf.Abs(this.rigid2D.velocity.x);
-        BGspeed = (speedx > 0f) ? 0.1f * key : 0f;
+        BGspeed = (speedx > 0f) ? 0.1f * key * (maxWalkSpeed/3.0f): 0f;
         if (speedx < this.maxWalkSpeed)
         {
             this.rigid2D.AddForce(transform.right * key * this.walkForce*Time.deltaTime);
@@ -205,7 +210,22 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) && attack_speed<=attack_cool)
         {
-            Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+            if (arcana)
+            {
+                float dir= transform.localScale.x < 0 ? -1 : 1;
+                Quaternion rotate1 = Quaternion.Euler(new Vector3(0, 0, dir * 105f));
+                Quaternion rotate2 = Quaternion.Euler(new Vector3(0, 0, dir * 95f));
+                Quaternion rotate3 = Quaternion.Euler(new Vector3(0, 0, dir * 85f));
+                Quaternion rotate4 = Quaternion.Euler(new Vector3(0, 0, dir * 75f));
+                Instantiate(AttackObject, attackPos.position, rotate1).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                Instantiate(AttackObject, attackPos.position, rotate2).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                Instantiate(AttackObject, attackPos.position, rotate3).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                Instantiate(AttackObject, attackPos.position, rotate4).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+            }
+            else
+            {
+                Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+            }
             animator.SetTrigger("attack");
             attack_cool = 0;
         }
@@ -457,7 +477,7 @@ public class PlayerController : MonoBehaviour
     // 스텟 조절
     public float DecreaseMana(float mana)
     {
-        this.mana -= mana;
+        this.mana -= mana * cycle;
         return mana;
     }
     public float SheildRatio()
