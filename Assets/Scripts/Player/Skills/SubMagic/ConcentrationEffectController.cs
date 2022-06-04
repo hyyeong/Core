@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ConcentrationEffectController : MonoBehaviour
+{
+    PlayerController player;
+    GameObject playerObject;
+    void Start()
+    {
+        playerObject = GameObject.Find("Player");
+        player = playerObject.GetComponent<PlayerController>();
+    }
+
+    void Update()
+    {
+        if (player.concentrationTime < 0)
+        {
+            Destroy(gameObject);
+        }
+        transform.position = playerObject.transform.position + new Vector3(0, 2, 0);
+    }
+}
