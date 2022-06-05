@@ -30,13 +30,16 @@ public class HealSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // 데이터 담기
-        dragAndDropContainer.gameObject.SetActive(true);
-        dragAndDropContainer.mana = mana;
-        dragAndDropContainer.image.sprite = skillImage.sprite;
-        dragAndDropContainer.cooltime = cooltime;
-        dragAndDropContainer.skillfunc = skillfunc;
-        isDragging = true;
+        if (!btn.IsInteractable())
+        {
+            // 데이터 담기
+            dragAndDropContainer.gameObject.SetActive(true);
+            dragAndDropContainer.mana = mana;
+            dragAndDropContainer.image.sprite = skillImage.sprite;
+            dragAndDropContainer.cooltime = cooltime;
+            dragAndDropContainer.skillfunc = skillfunc;
+            isDragging = true;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -49,26 +52,15 @@ public class HealSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        isDragging = false;
-        // 리셋
-        dragAndDropContainer.image.sprite = null;
-        dragAndDropContainer.transform.position = new Vector3(0, 0, 0);
-        dragAndDropContainer.mana = 0;
-        dragAndDropContainer.skillfunc = null;
-        dragAndDropContainer.gameObject.SetActive(false);
-    }
-    // 드롭 오브젝트에서 발생
-    /*public void OnDrop(PointerEventData eventData)
-    {
-        if (dragAndDropContainer.image.sprite != null)
+        if (!btn.IsInteractable())
         {
-            Sprite tempSprite = skillImage.sprite;
-
-            dragAndDropContainer.image.sprite = tempSprite;
-        }
-        else
-        {
+            isDragging = false;
+            // 리셋
             dragAndDropContainer.image.sprite = null;
+            dragAndDropContainer.transform.position = new Vector3(0, 0, 0);
+            dragAndDropContainer.mana = 0;
+            dragAndDropContainer.skillfunc = null;
+            dragAndDropContainer.gameObject.SetActive(false);
         }
-    }*/
+    }
 }

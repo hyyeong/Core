@@ -85,11 +85,11 @@ public class PlayerController : MonoBehaviour
     public float eCoolTime { get; set; } = 3f;
     public float rCoolTime { get; set; } = 3f;
     public float tCoolTime { get; set; } = 3f;
-    public float currentQCoolTime { get; set; } // 현재 재사용 대기시간
-    public float currentWCoolTime { get; set; }
-    public float currentECoolTime { get; set; }
-    public float currentRCoolTime { get; set; }
-    public float currentTCoolTime { get; set; }
+    public float currentQCoolTime { get; set; } = 0;// 현재 재사용 대기시간
+    public float currentWCoolTime { get; set; } = 0;
+    public float currentECoolTime { get; set; } = 0;
+    public float currentRCoolTime { get; set; } = 0;
+    public float currentTCoolTime { get; set; } = 0;
 
     public float qMana { get; set; } = 0f;
     public float wMana { get; set; } = 0f;
@@ -130,12 +130,6 @@ public class PlayerController : MonoBehaviour
         ESkill = new SkillSet(SkillHoly);
         RSkill = new SkillSet(SkillAltin);
         TSkill = new SkillSet(SkillMagicCircle);
-        // 쿨다운 설정
-        currentQCoolTime = qCoolTime;
-        currentWCoolTime = wCoolTime;
-        currentECoolTime = eCoolTime;
-        currentRCoolTime = rCoolTime;
-        currentTCoolTime = tCoolTime;
 
         // 코루틴 설정
         StartCoroutine(ManageBuff());
@@ -210,6 +204,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) && attack_speed<=attack_cool)
         {
+            float atk = concentration * atk_damage;
             if (arcana)
             {
                 float dir= transform.localScale.x < 0 ? -1 : 1;
@@ -273,45 +268,45 @@ public class PlayerController : MonoBehaviour
     // Skill Check
     void CheckSkill()
     {
-        currentQCoolTime += Time.deltaTime;
-        currentWCoolTime += Time.deltaTime;
-        currentECoolTime += Time.deltaTime;
-        currentRCoolTime += Time.deltaTime;
-        currentTCoolTime += Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime >= qCoolTime && mana>=qMana)
+        currentQCoolTime -= Time.deltaTime;
+        currentWCoolTime -= Time.deltaTime;
+        currentECoolTime -= Time.deltaTime;
+        currentRCoolTime -= Time.deltaTime;
+        currentTCoolTime -= Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime <= 0 && mana>=qMana)
         {
             animator.SetTrigger("isLookUp");
             QSkill();
             DecreaseMana(qMana);
-            currentQCoolTime = 0f;
+            currentQCoolTime = qCoolTime;
         }
-        if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime >= wCoolTime && mana >= wMana)
+        if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime <= 0 && mana >= wMana)
         {
             animator.SetTrigger("isLookUp");
             WSkill();
             DecreaseMana(wMana);
-            currentWCoolTime = 0f;
+            currentWCoolTime = wCoolTime;
         }
-        if (Input.GetKeyDown(KeyCode.E) && currentECoolTime >= eCoolTime && mana >= eMana)
+        if (Input.GetKeyDown(KeyCode.E) && currentECoolTime <= 0 && mana >= eMana)
         {
             animator.SetTrigger("isLookUp");
             ESkill();
             DecreaseMana(eMana);
-            currentECoolTime = 0f;
+            currentECoolTime = eCoolTime;
         }
-        if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime >= rCoolTime && mana >= rMana)
+        if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime <= 0 && mana >= rMana)
         {
             animator.SetTrigger("isLookUp");
             RSkill();
             DecreaseMana(rMana);
-            currentRCoolTime = 0f;
+            currentRCoolTime = rCoolTime;
         }
-        if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime >= tCoolTime && mana >= tMana)
+        if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime <= 0 && mana >= tMana)
         {
             animator.SetTrigger("isLookUp");
             TSkill();
             DecreaseMana(tMana);
-            currentTCoolTime = 0f;
+            currentTCoolTime = tCoolTime;
         }
     }
     // 스킬이 비어있는 경우
@@ -381,7 +376,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicArrowEffect, attackPos.position, effectRotation);
         skillEffect.GetComponent<MagicArrowController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<MagicArrowController>().damage = atk_damage * (2f+magic_atk);
+        skillEffect.GetComponent<MagicArrowController>().damage = atk_damage * (2f+magic_atk) * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillLightningBall()
@@ -390,7 +385,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(lightningBallEffect, attackPos.position, effectRotation);
         skillEffect.GetComponent<LightningBallController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<LightningBallController>().damage = atk_damage * 1.75f * elemental_atk;
+        skillEffect.GetComponent<LightningBallController>().damage = atk_damage * 1.75f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillLightningArrow()
@@ -400,7 +395,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation);
         skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<LightningArrowController>().damage = atk_damage * 3.5f * elemental_atk;
+        skillEffect.GetComponent<LightningArrowController>().damage = atk_damage * 3.5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillArtifficialSun()
@@ -410,7 +405,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(artifficialSunEffect, attackPos.position + new Vector3(5f * dir, 15f, 0), effectRotation);
         skillEffect.GetComponent<ArtifficialSunController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ArtifficialSunController>().damage = atk_damage * 5f * elemental_atk;
+        skillEffect.GetComponent<ArtifficialSunController>().damage = atk_damage * 5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillFireSheild()
@@ -420,7 +415,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(fireShieldEffect, attackPos.position + new Vector3(0f,0f, 0), effectRotation);
         skillEffect.GetComponent<FireShieldController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<FireShieldController>().damage = atk_damage * 1.5f * elemental_atk;
+        skillEffect.GetComponent<FireShieldController>().damage = atk_damage * 1.5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillBlizzard()
@@ -430,7 +425,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(blizzardEffect, attackPos.position + new Vector3(dir*15f, 5f, 0), effectRotation);
         skillEffect.GetComponent<BlizzardController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<BlizzardController>().damage = atk_damage * 2f * elemental_atk;
+        skillEffect.GetComponent<BlizzardController>().damage = atk_damage * 2f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
 
@@ -441,7 +436,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicCircleEffect, attackPos.position + new Vector3(0, 5f, 0), effectRotation);
         skillEffect.GetComponent<MagicCircleController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<MagicCircleController>().damage = atk_damage * (2f + magic_atk);
+        skillEffect.GetComponent<MagicCircleController>().damage = atk_damage * (2f + magic_atk)* concentration;
         animator.SetTrigger("attack");
     }
 
@@ -454,7 +449,7 @@ public class PlayerController : MonoBehaviour
             Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir*12.5f*i)); // 쿼터니언 오일러각 사용
             GameObject skillEffect = Instantiate(altinEffect, attackPos.position + new Vector3(0, 2f, 0), effectRotation);
             skillEffect.GetComponent<AltinController>().setDirection(transform.localScale.x);
-            skillEffect.GetComponent<AltinController>().damage = atk_damage * (2.5f + magic_atk);
+            skillEffect.GetComponent<AltinController>().damage = atk_damage * (2.5f + magic_atk) * concentration;
         }
         animator.SetTrigger("attack");
     }
@@ -466,7 +461,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(holyEffect, attackPos.position + new Vector3(0, 0f, 0), effectRotation);
         skillEffect.GetComponent<HolyController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<HolyController>().damage = atk_damage * (5.5f + magic_atk);
+        skillEffect.GetComponent<HolyController>().damage = atk_damage * (5.5f + magic_atk) * concentration;
         animator.SetTrigger("attack");
     }
 
