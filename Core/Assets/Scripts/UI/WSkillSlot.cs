@@ -12,13 +12,18 @@ public class WSkillSlot : MonoBehaviour, IDropHandler
     public Text CoolText;
     public Image Cool;
 
+    public AudioClip slotAudioClip;
+    AudioSource slotAudio;
+
     bool enable = false;
     float ratio;
     void Start()
     {
+        slotAudio = gameObject.AddComponent<AudioSource>();
+        slotAudio.loop = false;
+        slotAudio.clip = slotAudioClip;
 
     }
-
     void Update()
     {
         if (enable)
@@ -54,5 +59,6 @@ public class WSkillSlot : MonoBehaviour, IDropHandler
     void SoundEffect()
     {
 
+        slotAudio.Play();
     }
 }

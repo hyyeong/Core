@@ -13,11 +13,17 @@ public class QSkillSlot : MonoBehaviour, IDropHandler
     public Text CoolText;
     public Image Cool;
 
+    public AudioClip slotAudioClip;
+    AudioSource slotAudio;
+
     bool enable = false;
     float ratio;
     void Start()
     {
-        
+        slotAudio = gameObject.AddComponent<AudioSource>();
+        slotAudio.loop = false;
+        slotAudio.clip = slotAudioClip;
+
     }
 
     void Update()
@@ -54,6 +60,6 @@ public class QSkillSlot : MonoBehaviour, IDropHandler
     }
     void SoundEffect()
     {
-
+        slotAudio.Play();
     }
 }

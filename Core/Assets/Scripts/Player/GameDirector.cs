@@ -42,6 +42,21 @@ public class GameDirector : MonoBehaviour
     public Text skillPointText;
     public Text skillAlert;
     public GameObject Alert;
+
+    public AudioClip learnAudioClip;
+    AudioSource learnAudio;
+    [System.Serializable]
+    public struct Bgm
+    {
+        public string name;
+        public AudioClip audio;
+    }
+    public Bgm[] BGMList;
+    int bgmLoop = 0;
+    private AudioSource BGM;
+    private string NowBGMname = "";
+    public float volume=0.5f;
+
     // 스킬 공통
     bool healCondition = false; // 스킬을 찍기위한 사전조건
     bool armorEnforceCondition = false;
@@ -68,13 +83,29 @@ public class GameDirector : MonoBehaviour
     bool elementalEnforceCondition = false;
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>(); 
+        BGM = gameObject.AddComponent<AudioSource>();
+        BGM.loop = false;
+        learnAudio = gameObject.AddComponent<AudioSource>();
+        learnAudio.loop = false;
+        learnAudio.clip = learnAudioClip;
     }
 
     void Update()
     {
         skillPointText.text = $"SkillPoint:{player.skillPoints}";
+        if (!BGM.isPlaying)
+        {
+            BGM.clip = BGMList[bgmLoop].audio;
+            BGM.volume = volume;
+            BGM.Play();
+            NowBGMname = name;
+            bgmLoop++;
+            if (bgmLoop > BGMList.Length)
+                bgmLoop = 0;
+        }
     }
+
     public void LearnElementalEnforce()
     {
         if (player.skillPoints > 0 && elementalEnforceCondition)
@@ -565,5 +596,6 @@ public class GameDirector : MonoBehaviour
     {
         Alert.gameObject.SetActive(true);
         Alert.GetComponent<SkillAlertController>().time = 0f;
+        learnAudio.Play();
     }
 }

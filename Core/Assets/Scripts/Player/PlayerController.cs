@@ -51,9 +51,9 @@ public class PlayerController : MonoBehaviour
     public float MAX_SHIELD { get; set; } = 6000;
     public float MAX_MANA { get; set; } = 6000;
     public float atk_damage { get; set; } = 1000;
-    public float jumpForce = 600.0f;
-    public float walkForce = 70.0f;
-    public float maxWalkSpeed { set; get; } = 3.0f;
+    public float jumpForce;
+    public float walkForce;
+    public float maxWalkSpeed { set; get; } = 7.0f;
     public float attack_speed { set; get; } = 1f;
     public float attack_cool { set; get; } = 0;
     public float armor { set; get; } = 0;
@@ -126,10 +126,10 @@ public class PlayerController : MonoBehaviour
 
         // 스킬 설정
         QSkill = new SkillSet(EmptySkill);
-        WSkill = new SkillSet(SkillFireSheild);
-        ESkill = new SkillSet(SkillHoly);
-        RSkill = new SkillSet(SkillAltin);
-        TSkill = new SkillSet(SkillMagicCircle);
+        WSkill = new SkillSet(EmptySkill);
+        ESkill = new SkillSet(EmptySkill);
+        RSkill = new SkillSet(EmptySkill);
+        TSkill = new SkillSet(EmptySkill);
 
         // 코루틴 설정
         StartCoroutine(ManageBuff());

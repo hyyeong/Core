@@ -13,10 +13,16 @@ public class RSkillSlot : MonoBehaviour, IDropHandler
     public Text CoolText;
     public Image Cool;
 
+    public AudioClip slotAudioClip;
+    AudioSource slotAudio;
+
     bool enable = false;
     float ratio;
     void Start()
     {
+        slotAudio = gameObject.AddComponent<AudioSource>();
+        slotAudio.loop = false;
+        slotAudio.clip = slotAudioClip;
 
     }
 
@@ -54,6 +60,7 @@ public class RSkillSlot : MonoBehaviour, IDropHandler
     }
     void SoundEffect()
     {
+        slotAudio.Play();
 
     }
 }
