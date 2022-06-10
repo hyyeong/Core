@@ -20,7 +20,13 @@ public class PlayerController : MonoBehaviour
 
     const int MAX_JUMP = 2; // 2단점프까지
     int isJump = 0; // 점프상태 체크 변수
-
+    AudioSource audioMoveJumpATK;
+    AudioSource audioSk;
+    public AudioClip audioAtk;
+    public AudioClip audioHit;
+    public AudioClip audioJump;
+    public AudioClip audioJump1;
+    public AudioClip audioSkill;
     Transform attackPos;
 
     public GameObject PlayerAttackPos;
@@ -112,6 +118,10 @@ public class PlayerController : MonoBehaviour
     // 메소드
     void Start()
     {
+        this.audioMoveJumpATK = gameObject.AddComponent<AudioSource>();
+        audioMoveJumpATK.loop = false;
+        audioSk = gameObject.AddComponent<AudioSource>();
+        audioSk.loop = false;
         this.rigid2D = GetComponent<Rigidbody2D>(); // 물리객체 휙득
         this.animator = GetComponent<Animator>();
         this.attackPos = PlayerAttackPos.transform;
@@ -136,17 +146,21 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        this.animator.SetBool("isJump", false);
-        Debug.Log($"충돌 점프 false 설정 실제 jump : {this.animator.GetBool("isJump")}");
-        isJump = 0;// 점프횟수 0
+        if (other.CompareTag("Map"))
+        {
+            this.animator.SetBool("isJump", false);
+            audioMoveJumpATK.clip = audioJump;
+            audioMoveJumpATK.Play();
+            isJump = 0;// 점프횟수 0
+        }
     }
     // Update is called once per frame
     void Update()
     {
+        Attack();
         Jump();
         CheckRun();
         // 공격 체크
-        Attack();
         RecoveryShield(recoverySheildPerSec * Time.deltaTime);
         RecoveryMana(recoveryManaPerSec * Time.deltaTime);
         Die();
@@ -194,11 +208,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
-    public void getSkillHeal()
-    {
-        Debug.Log("장착");
-        GameObject.Find("HealSkill").GetComponent<HealSkillUI>().skillfunc=SkillHeal;
-    }
 /* 캐릭터 행동 메소드*/
     void Attack()
     {
@@ -223,6 +232,8 @@ public class PlayerController : MonoBehaviour
             }
             animator.SetTrigger("attack");
             attack_cool = 0;
+            audioSk.clip = audioAtk;
+            audioSk.Play();
         }
         attack_cool += (attack_cool <= 2) ? Time.deltaTime : 0;
     }
@@ -235,6 +246,8 @@ public class PlayerController : MonoBehaviour
             if (isJump == 2) plusJumpForce = 1.5f;
             this.rigid2D.AddForce(Vector2.up * this.jumpForce * plusJumpForce *ara);
             animator.SetBool("isJump", true);
+            audioMoveJumpATK.clip = audioJump1;
+            audioMoveJumpATK.Play();
         }
     }
     private void CheckRun()
@@ -275,6 +288,7 @@ public class PlayerController : MonoBehaviour
         currentTCoolTime -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Q) && currentQCoolTime <= 0 && mana>=qMana)
         {
+            Debug.Log("q");
             animator.SetTrigger("isLookUp");
             QSkill();
             DecreaseMana(qMana);
@@ -282,6 +296,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.W) && currentWCoolTime <= 0 && mana >= wMana)
         {
+            Debug.Log("w");
             animator.SetTrigger("isLookUp");
             WSkill();
             DecreaseMana(wMana);
@@ -289,6 +304,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E) && currentECoolTime <= 0 && mana >= eMana)
         {
+            Debug.Log("e");
             animator.SetTrigger("isLookUp");
             ESkill();
             DecreaseMana(eMana);
@@ -296,6 +312,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R) && currentRCoolTime <= 0 && mana >= rMana)
         {
+            Debug.Log("r");
             animator.SetTrigger("isLookUp");
             RSkill();
             DecreaseMana(rMana);
@@ -303,6 +320,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T) && currentTCoolTime <= 0 && mana >= tMana)
         {
+            Debug.Log("t");
             animator.SetTrigger("isLookUp");
             TSkill();
             DecreaseMana(tMana);
@@ -363,7 +381,7 @@ public class PlayerController : MonoBehaviour
     {
         // 짧은거리 순간이동
         float dir = transform.localScale.x > 0 ? 1 : -1;
-        Vector3 newLocation = transform.position + new Vector3(dir*4f,0,0);
+        Vector3 newLocation = transform.position + new Vector3(dir*7f,0,0);
         Instantiate(blinkEffect, transform.position, transform.rotation);
         transform.position = newLocation;
         Instantiate(blinkEffect, transform.position, transform.rotation);
@@ -473,6 +491,8 @@ public class PlayerController : MonoBehaviour
     public float DecreaseMana(float mana)
     {
         this.mana -= mana * cycle;
+        audioSk.clip = audioSkill;
+        audioSk.Play();
         return mana;
     }
     public float SheildRatio()
@@ -497,6 +517,8 @@ public class PlayerController : MonoBehaviour
         {
             shield -= dam;
         }
+        audioMoveJumpATK.clip = audioHit;
+        audioMoveJumpATK.Play();
     }
     void IncreaseExp(float exp_)
     {

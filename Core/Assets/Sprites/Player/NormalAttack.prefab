@@ -4760,7 +4760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 100004, guid: 757df604761b8ef42831192c70ee1099, type: 3}
-  speed: 5
+  speed: 10
 --- !u!58 &-3267079192613654274
 CircleCollider2D:
   m_ObjectHideFlags: 0

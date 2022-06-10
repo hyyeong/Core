@@ -1282,8 +1282,8 @@ MonoBehaviour:
   skillImage: {fileID: 0}
   dragAndDropContainer: {fileID: 1937137264}
   btn: {fileID: 132592323}
-  mana: 120
-  cooltime: 7
+  mana: 160
+  cooltime: 4
   player: {fileID: 1016853245}
 --- !u!1 &224204200
 GameObject:
@@ -6845,6 +6845,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b9f25ec5e740a4eb241fde1d4b6b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioAtk: {fileID: 8300000, guid: 848e3a4db2e4db74abf2b14d08965207, type: 3}
+  audioHit: {fileID: 8300000, guid: dd85c1a6a6ef9464aa0bbe01917dd1f9, type: 3}
+  audioJump: {fileID: 8300000, guid: 69e48f21cac827343957a8768b063864, type: 3}
+  audioJump1: {fileID: 8300000, guid: 69e48f21cac827343957a8768b063864, type: 3}
+  audioSkill: {fileID: 8300000, guid: 848e3a4db2e4db74abf2b14d08965207, type: 3}
   PlayerAttackPos: {fileID: 662072149}
   AttackObject: {fileID: 1545806602296978, guid: 9e4577abe56a95f4a91d29a0473cd30c, type: 3}
   buffEffect: {fileID: 0}
