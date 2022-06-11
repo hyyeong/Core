@@ -101,7 +101,7 @@ public class GameDirector : MonoBehaviour
             BGM.Play();
             NowBGMname = name;
             bgmLoop++;
-            if (bgmLoop > BGMList.Length)
+            if (bgmLoop >= BGMList.Length)
                 bgmLoop = 0;
         }
     }
