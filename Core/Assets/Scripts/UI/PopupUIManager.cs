@@ -12,6 +12,7 @@ public class PopupUIManager : MonoBehaviour
     public PopupUI _skillPopup;
     public PopupUI _characterInfoPopup;
 
+    public AudioClip sound;
     [Space]
     public KeyCode _escapeKey = KeyCode.Escape;
     public KeyCode _inventoryKey = KeyCode.I;
@@ -26,6 +27,7 @@ public class PopupUIManager : MonoBehaviour
 
     /// <summary> 전체 팝업 목록 </summary>
     private List<PopupUI> _allPopupList;
+    private AudioSource audio;
 
     /***********************************************************************
     *                               Unity Callbacks
@@ -35,6 +37,10 @@ public class PopupUIManager : MonoBehaviour
         _activePopupLList = new LinkedList<PopupUI>();
         Init();
         InitCloseAll();
+        audio = gameObject.AddComponent<AudioSource>();
+        audio.clip = sound;
+        audio.loop = false;
+        audio.Play();
     }
 
     private void Update()
@@ -45,6 +51,7 @@ public class PopupUIManager : MonoBehaviour
             if (_activePopupLList.Count > 0)
             {
                 ClosePopup(_activePopupLList.First.Value);
+                audio.Play();
             }
         }
 
@@ -94,7 +101,11 @@ public class PopupUIManager : MonoBehaviour
     private void ToggleKeyDownAction(in KeyCode key, PopupUI popup)
     {
         if (Input.GetKeyDown(key))
+        {
             ToggleOpenClosePopup(popup);
+
+            audio.Play();
+        }
     }
 
     /// <summary> 팝업의 상태(opened/closed)에 따라 열거나 닫기 </summary>
@@ -102,6 +113,7 @@ public class PopupUIManager : MonoBehaviour
     {
         if (!popup.gameObject.activeSelf) OpenPopup(popup);
         else ClosePopup(popup);
+        audio.Play();
     }
 
     /// <summary> 팝업을 열고 링크드리스트의 상단에 추가 </summary>

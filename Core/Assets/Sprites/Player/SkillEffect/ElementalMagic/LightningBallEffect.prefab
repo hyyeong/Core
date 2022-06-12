@@ -19079,9 +19079,10 @@ GameObject:
   - component: {fileID: 19900008}
   - component: {fileID: 8200000}
   - component: {fileID: 4342427853974271125}
+  - component: {fileID: -5518326449170655371}
   m_Layer: 0
   m_Name: LightningBallEffect
-  m_TagString: TAZOFX
+  m_TagString: PlayerAtk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23896,11 +23897,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b6e7bea0623796447bde85ea84038fc8, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8c2032d7c2b2bb24083793617afe4bcb, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1.05
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -23998,3 +23999,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.65
+--- !u!114 &-5518326449170655371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f977cbe5f56a56458ee8733dec025d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
