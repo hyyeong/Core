@@ -8,6 +8,10 @@ TagManager:
   - Enemy
   - TAZOFX
   - Map
+  - Trap
+  - enemyattack
+  - PlayerAtk
+  - PlayerDotAtk
   layers:
   - Default
   - TransparentFX
@@ -17,7 +21,7 @@ TagManager:
   - UI
   - Bg
   - Effect
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -53,4 +57,7 @@ TagManager:
     locked: 0
   - name: Effect
     uniqueID: 4057737835
+    locked: 0
+  - name: Enemy
+    uniqueID: 1183895599
     locked: 0

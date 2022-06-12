@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 199368054502676096}
   - component: {fileID: -1869629582416491579}
   - component: {fileID: -3267079192613654274}
+  - component: {fileID: 4738866051599656584}
   m_Layer: 0
   m_Name: NormalAttack
-  m_TagString: Untagged
+  m_TagString: PlayerAtk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4777,6 +4778,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!114 &4738866051599656584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545806602296978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f977cbe5f56a56458ee8733dec025d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1611160775618410
 GameObject:
   m_ObjectHideFlags: 0

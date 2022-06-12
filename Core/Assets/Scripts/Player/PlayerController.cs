@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
     public float MAX_HP { get; set; } = 3000;
     public float MAX_SHIELD { get; set; } = 6000;
     public float MAX_MANA { get; set; } = 6000;
-    public float atk_damage { get; set; } = 1000;
+    public float atk_damage { get; set; } = 250;
     public float jumpForce;
     public float walkForce;
     public float maxWalkSpeed { set; get; } = 7.0f;
@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviour
     public float araTime { set; get; } = 0f;
     public float concentrationTime { set; get; } = 0f;
     public float recyclingTime { set; get; } = 0f;
+    float invincibility = 0f;
     // 메소드
     void Start()
     {
@@ -146,12 +147,20 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Map"))
+        if (other.CompareTag("Map")||other.CompareTag("Trap"))
         {
             this.animator.SetBool("isJump", false);
             audioMoveJumpATK.clip = audioJump;
             audioMoveJumpATK.Play();
             isJump = 0;// 점프횟수 0
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Trap")&&invincibility>0.5f)
+        {
+            invincibility = 0f;
+            Damaged(100);
         }
     }
     // Update is called once per frame
@@ -180,6 +189,7 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
+            invincibility += Time.deltaTime;
             lifeStealTime -= Time.deltaTime;
             recoverySheildTime -= Time.deltaTime;
             araTime -= Time.deltaTime;
@@ -221,14 +231,24 @@ public class PlayerController : MonoBehaviour
                 Quaternion rotate2 = Quaternion.Euler(new Vector3(0, 0, dir * 95f));
                 Quaternion rotate3 = Quaternion.Euler(new Vector3(0, 0, dir * 85f));
                 Quaternion rotate4 = Quaternion.Euler(new Vector3(0, 0, dir * 75f));
-                Instantiate(AttackObject, attackPos.position, rotate1).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
-                Instantiate(AttackObject, attackPos.position, rotate2).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
-                Instantiate(AttackObject, attackPos.position, rotate3).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
-                Instantiate(AttackObject, attackPos.position, rotate4).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                GameObject a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                a1.GetComponent<ATK>().damage = atk;
+                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                a1.GetComponent<ATK>().damage = atk;
+                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                a1.GetComponent<ATK>().damage = atk;
+                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                a1.GetComponent<ATK>().damage = atk;
             }
             else
             {
-                Instantiate(AttackObject, attackPos.position, attackPos.rotation).GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                GameObject a1 = Instantiate(AttackObject, attackPos.position, attackPos.rotation);
+                a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
+                a1.GetComponent<ATK>().damage = atk;
             }
             animator.SetTrigger("attack");
             attack_cool = 0;
@@ -394,7 +414,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicArrowEffect, attackPos.position, effectRotation);
         skillEffect.GetComponent<MagicArrowController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<MagicArrowController>().damage = atk_damage * (2f+magic_atk) * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f+magic_atk) * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillLightningBall()
@@ -403,7 +423,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(lightningBallEffect, attackPos.position, effectRotation);
         skillEffect.GetComponent<LightningBallController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<LightningBallController>().damage = atk_damage * 1.75f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 1.75f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillLightningArrow()
@@ -413,7 +433,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation);
         skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<LightningArrowController>().damage = atk_damage * 3.5f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 3.5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillArtifficialSun()
@@ -423,7 +443,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(artifficialSunEffect, attackPos.position + new Vector3(5f * dir, 15f, 0), effectRotation);
         skillEffect.GetComponent<ArtifficialSunController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ArtifficialSunController>().damage = atk_damage * 5f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillFireSheild()
@@ -433,7 +453,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(fireShieldEffect, attackPos.position + new Vector3(0f,0f, 0), effectRotation);
         skillEffect.GetComponent<FireShieldController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<FireShieldController>().damage = atk_damage * 1.5f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 1.5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillBlizzard()
@@ -443,7 +463,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(blizzardEffect, attackPos.position + new Vector3(dir*15f, 5f, 0), effectRotation);
         skillEffect.GetComponent<BlizzardController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<BlizzardController>().damage = atk_damage * 2f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 2f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
 
@@ -454,7 +474,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicCircleEffect, attackPos.position + new Vector3(0, 5f, 0), effectRotation);
         skillEffect.GetComponent<MagicCircleController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<MagicCircleController>().damage = atk_damage * (2f + magic_atk)* concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f + magic_atk)* concentration;
         animator.SetTrigger("attack");
     }
 
@@ -467,7 +487,7 @@ public class PlayerController : MonoBehaviour
             Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, dir*12.5f*i)); // 쿼터니언 오일러각 사용
             GameObject skillEffect = Instantiate(altinEffect, attackPos.position + new Vector3(0, 2f, 0), effectRotation);
             skillEffect.GetComponent<AltinController>().setDirection(transform.localScale.x);
-            skillEffect.GetComponent<AltinController>().damage = atk_damage * (2.5f + magic_atk) * concentration;
+            skillEffect.GetComponent<ATK>().damage = atk_damage * (2.5f + magic_atk) * concentration;
         }
         animator.SetTrigger("attack");
     }
@@ -479,7 +499,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(holyEffect, attackPos.position + new Vector3(0, 0f, 0), effectRotation);
         skillEffect.GetComponent<HolyController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<HolyController>().damage = atk_damage * (5.5f + magic_atk) * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * (5.5f + magic_atk) * concentration;
         animator.SetTrigger("attack");
     }
 
@@ -517,6 +537,7 @@ public class PlayerController : MonoBehaviour
         {
             shield -= dam;
         }
+        animator.SetTrigger("hurt");
         audioMoveJumpATK.clip = audioHit;
         audioMoveJumpATK.Play();
     }
