@@ -7,7 +7,7 @@ public class EnemyAi : MonoBehaviour
 {
     Transform target;
     float attackDelay;
-
+    public GameObject AttackObject;
     Enemy enemy;
     Animator enemyAnimator;
 
@@ -16,12 +16,15 @@ public class EnemyAi : MonoBehaviour
         target = GameObject.Find("Player").transform;
         enemy = GetComponent<Enemy>();
         enemyAnimator = enemy.enemyAnimator;
+        AttackObject.GetComponent<ATK>().damage = enemy.atkDmg;
+        AttackObject.SetActive(false);
     }
 
     void Update()
     {
         attackDelay -= Time.deltaTime;
         if (attackDelay < 0) attackDelay = 0;
+        if (attackDelay < enemy.atkSpeed - 0.2) AttackObject.SetActive(false);
         float distance = Vector3.Distance(transform.position, target.position);
 
         if (attackDelay == 0 && distance <= enemy.fieldOfVision)
@@ -70,6 +73,7 @@ public class EnemyAi : MonoBehaviour
 
     void AttackTarget()
     {
+        AttackObject.SetActive(true);
         enemyAnimator.SetTrigger("Attack"); // 공격 애니메이션 실행
         attackDelay = enemy.atkSpeed; // 딜레이 충전
     }

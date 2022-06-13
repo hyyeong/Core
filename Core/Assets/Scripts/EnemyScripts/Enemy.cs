@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     public float moveSpeed;
     public float atkRange;
     public float fieldOfVision;
+    public float exp;
 
     private bool alive = true;
 
@@ -31,6 +32,7 @@ public class Enemy : MonoBehaviour
     {
         canvas = GameObject.Find("Canvas");
         hpBar = Instantiate(prfHpBar, canvas.transform).GetComponent<RectTransform>();
+        hpBar.transform.SetAsFirstSibling();
 
         nowHpbar = hpBar.transform.GetChild(0).GetComponent<Image>();
 
@@ -83,7 +85,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.5f)
+        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.25f)
         {
             invincibility = 0f;
             enemyAnimator.SetTrigger("Damage");
@@ -94,6 +96,7 @@ public class Enemy : MonoBehaviour
     void Die() // 사망시
     {
         alive = false;
+        GameObject.Find("Player").GetComponent<PlayerController>().IncreaseExp(exp); // 경험치 증가
         enemyAnimator.SetTrigger("Down");            // 애니메이션 실행
         GetComponent<EnemyAi>().enabled = false;    // 추적 비활성화
         GetComponent<BoxCollider2D>().enabled = false; // 충돌체 비활성화
