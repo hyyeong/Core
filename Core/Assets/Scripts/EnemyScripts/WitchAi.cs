@@ -10,7 +10,6 @@ public class WitchAi : MonoBehaviour
     float attackDelay;
     float magicDelay;
 
-    public GameObject AttackObject;
     Witch enemy;
     Animator enemyAnimator;
 
@@ -18,58 +17,52 @@ public class WitchAi : MonoBehaviour
     {
         enemy = GetComponent<Witch>();
         enemyAnimator = enemy.enemyAnimator;
-        target = GameObject.Find("Player").transform;
-        AttackObject.GetComponent<ATK>().damage = enemy.atkDmg;
-        AttackObject.SetActive(false);
     }
 
     void Update()
     {
-        if (enemy.alive)
+        target = GameObject.Find("Player").transform;
+        attackDelay -= Time.deltaTime;
+        magicDelay -= Time.deltaTime;
+        if (attackDelay < 0) attackDelay = 0;
+        if (magicDelay < 0) magicDelay = 0;
+        float distance = Vector3.Distance(transform.position, target.position);
+
+        if(magicDelay == 0 && distance <= enemy.fieldOfVision)
         {
-            attackDelay -= Time.deltaTime;
-            magicDelay -= Time.deltaTime;
-            if (attackDelay < 0) attackDelay = 0;
-            if (magicDelay < 0) magicDelay = 0;
-            if (attackDelay < enemy.atkSpeed - 0.1) AttackObject.SetActive(false);
-            float distance = Vector3.Distance(transform.position, target.position);
+            FaceTarget();
 
-            if (magicDelay == 0 && distance <= enemy.fieldOfVision)
+            if (distance <= enemy.mgRange) //사거리 안에 목표가 있으면
             {
-                FaceTarget();
-
-                if (distance <= enemy.mgRange) //사거리 안에 목표가 있으면
-                {
-                    MagicTarget();
-                }
-                else
-                {
-                    if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("magic"))
-                    {
-                        MoveToTarget();
-                    }
-                }
-            }
-            else if (attackDelay == 0 && distance <= enemy.fieldOfVision)
-            {
-                FaceTarget();
-
-                if (distance <= enemy.atkRange)
-                {
-                    AttackTarget();
-                }
-                else
-                {
-                    if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-                    {
-                        MoveToTarget();
-                    }
-                }
+                MagicTarget();
             }
             else
             {
-                enemyAnimator.SetBool("moving", false);
+                if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("magic"))
+                {
+                    MoveToTarget();
+                }
             }
+        }
+        else if (attackDelay == 0 && distance <= enemy.fieldOfVision)
+        {
+            FaceTarget();
+
+            if (distance <= enemy.atkRange)
+            {
+                AttackTarget();
+            }
+            else
+            {
+                if (!enemyAnimator.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+                {
+                    MoveToTarget();
+                }
+            }
+        }
+        else
+        {
+            enemyAnimator.SetBool("moving", false);
         }
     }
 
@@ -97,7 +90,6 @@ public class WitchAi : MonoBehaviour
 
     void AttackTarget()
     {
-        AttackObject.SetActive(true);
         enemyAnimator.SetTrigger("Attack"); // 공격 애니메이션 실행
         attackDelay = enemy.atkSpeed; // 딜레이 충전
     }
@@ -111,7 +103,6 @@ public class WitchAi : MonoBehaviour
         attackDelay = enemy.atkSpeed;
 
         GameObject orb = Instantiate(Magic);
-        orb.GetComponent<ATK>().damage = enemy.atkDmg * 3;
         orb.transform.position = new Vector3(ordx, ordy+10, 0);
     }
 }
