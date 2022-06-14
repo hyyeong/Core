@@ -14,9 +14,10 @@ public class Enemy : MonoBehaviour
     public float atkRange;
     public float fieldOfVision;
     public float size;
+    public float exp;
 
     private void SetEnemyStatus(string _enemyName, int _maxHp, 
-        int _atkDmg, float _atkSpeed, float _moveSpeed, float _atkRange, float _fieldOfVision, float _size )
+        int _atkDmg, float _atkSpeed, float _moveSpeed, float _atkRange, float _fieldOfVision, float _size , float _exp/*추가된 부분*/)
     {
         enemyName = _enemyName;
         maxHp = _maxHp;
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour
         atkRange = _atkRange;
         fieldOfVision = _fieldOfVision;
         size = _size;
+        exp = _exp; //추가된 부분
     }
 
 
@@ -47,15 +49,15 @@ public class Enemy : MonoBehaviour
         //능력치 설정
         if (name.Equals("Slime"))
         {
-            SetEnemyStatus("Slime", 4, 1, 1, 4, 7, 20f, 4);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기
+            SetEnemyStatus("Slime", 4, 1, 1, 4, 7, 20f, 4, 10);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기, 경험치
         }
         if (name.Equals("Wolf"))
         {
-            SetEnemyStatus("Wolf", 6, 3, 1, 6, 7, 25f, 3);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기
+            SetEnemyStatus("Wolf", 6, 3, 1, 6, 7, 25f, 3, 10);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기, 경험치
         }
         if (name.Equals("Oak"))
         {
-            SetEnemyStatus("Oak", 8, 5, 1, 3, 8, 20f, 3);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기
+            SetEnemyStatus("Oak", 8, 5, 1, 3, 8, 20f, 3, 10);  //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기, 경험치
         }
         nowHpbar = hpBar.transform.GetChild(0).GetComponent<Image>();
 
@@ -111,6 +113,9 @@ public class Enemy : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());       // 중력 비활성화
         Destroy(hpBar.gameObject);                  // 체력바 제거
         Destroy(gameObject, 2);                     // 2초후 제거
+
+        GameObject director = GameObject.Find("Expscript");     // 추가된 부분(경험치)
+        director.GetComponent<Expscript>().AddExp(exp);         // 추가된 부분
     }
 
     void SetAttackSpeed(float speed)

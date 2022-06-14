@@ -16,10 +16,11 @@ public class Witch : MonoBehaviour
     public float size;
     public float mgSpeed;
     public float mgRange;
+    public float exp;
 
     private void SetEnemyStatus(string _enemyName, int _maxHp,
         int _atkDmg, float _atkSpeed, float _moveSpeed, float _atkRange,
-        float _fieldOfVision, float _size, float _mgSpeed, float _mgRange)
+        float _fieldOfVision, float _size, float _mgSpeed, float _mgRange, float _exp)
     {
         enemyName = _enemyName;
         maxHp = _maxHp;
@@ -32,6 +33,7 @@ public class Witch : MonoBehaviour
         size = _size;
         mgSpeed = _mgSpeed;
         mgRange = _mgRange;
+        exp = _exp; //추가된 부분
     }
 
 
@@ -50,8 +52,8 @@ public class Witch : MonoBehaviour
         hpBar = Instantiate(prfHpBar, canvas.transform).GetComponent<RectTransform>();
 
         //능력치 설정
-        SetEnemyStatus("Witch", 20, 1, 0.3f, 2, 5, 20f, 2, 2, 15);
-            //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기, 마법 속도, 마법 서정거리
+        SetEnemyStatus("Witch", 10, 1, 0.3f, 2, 5, 20f, 2, 2, 15, 10);
+            //이름, hp, 데미지, 공속, 이속, 공격 범위, 시아 범위, 크기, 마법 속도, 마법 서정거리, 경험치
         nowHpbar = hpBar.transform.GetChild(0).GetComponent<Image>();
 
         SetAttackSpeed(atkSpeed, mgSpeed);
@@ -90,6 +92,9 @@ public class Witch : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());       // 중력 비활성화
         Destroy(hpBar.gameObject);                  // 체력바 제거
         Destroy(gameObject, 2);                     // 2초후 제거
+
+        GameObject director = GameObject.Find("Expscript");     // 추가된 부분(경험치)
+        director.GetComponent<Expscript>().AddExp(exp);         // 추가된 부분
     }
 
     void SetAttackSpeed(float speed, float magic)
