@@ -16,7 +16,7 @@ public class Witch : MonoBehaviour
     public float mgSpeed;
     public float mgRange;
 
-    private bool alive = true;
+    public bool alive = true;
     float invincibility = 0.25f; //지속 대미지
 
     Image nowHpbar;
@@ -33,7 +33,7 @@ public class Witch : MonoBehaviour
     {
         canvas = GameObject.Find("Canvas");
         hpBar = Instantiate(prfHpBar, canvas.transform).GetComponent<RectTransform>();
-
+        hpBar.transform.SetAsFirstSibling();
         nowHpbar = hpBar.transform.GetChild(0).GetComponent<Image>();
 
         SetAttackSpeed(atkSpeed, mgSpeed);
@@ -68,7 +68,7 @@ public class Witch : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.5f)
+        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.25f)
         {
             invincibility = 0f;
             enemyAnimator.SetTrigger("Damage");
@@ -78,6 +78,7 @@ public class Witch : MonoBehaviour
 
     void Die()
     {
+        alive = false;
         enemyAnimator.SetTrigger("Down");            // 애니메이션 실행
         GetComponent<WitchAi>().enabled = false;    // 추적 비활성화
         GetComponent<BoxCollider2D>().enabled = false; // 충돌체 비활성화

@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     Text hptext;
     Text sheildtext;
     // Effect
+    public GameObject levelUpEffect;
     public GameObject healEffect;
     public GameObject blinkEffect;
     // AttackMagic Skill Effect
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour
     float exp = 0;
 
     // 스킬 관련
+    public int statPoints = 10;
     public int skillPoints = 10;
     public SkillSet QSkill { set; get; }
     public SkillSet WSkill { set; get; }
@@ -153,6 +155,11 @@ public class PlayerController : MonoBehaviour
             audioMoveJumpATK.clip = audioJump;
             audioMoveJumpATK.Play();
             isJump = 0;// 점프횟수 0
+        }
+        if (other.CompareTag("enemyattack"))
+        {
+            Debug.Log($"{other.GetComponent<ATK>().damage}");
+            Damaged(other.GetComponent<ATK>().damage);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -234,13 +241,13 @@ public class PlayerController : MonoBehaviour
                 GameObject a1 = Instantiate(AttackObject, attackPos.position, rotate1);
                 a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
                 a1.GetComponent<ATK>().damage = atk;
-                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1 = Instantiate(AttackObject, attackPos.position, rotate2);
                 a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
                 a1.GetComponent<ATK>().damage = atk;
-                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1 = Instantiate(AttackObject, attackPos.position, rotate3);
                 a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
                 a1.GetComponent<ATK>().damage = atk;
-                a1 = Instantiate(AttackObject, attackPos.position, rotate1);
+                a1 = Instantiate(AttackObject, attackPos.position, rotate4);
                 a1.GetComponent<NormalAttackController>().setDirection(transform.localScale.x);
                 a1.GetComponent<ATK>().damage = atk;
             }
@@ -453,7 +460,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(fireShieldEffect, attackPos.position + new Vector3(0f,0f, 0), effectRotation);
         skillEffect.GetComponent<FireShieldController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * 1.5f * elemental_atk * concentration;
+        skillEffect.transform.GetChild(2).GetComponent<ATK>().damage = atk_damage * 1.5f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillBlizzard()
@@ -463,7 +470,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(blizzardEffect, attackPos.position + new Vector3(dir*15f, 5f, 0), effectRotation);
         skillEffect.GetComponent<BlizzardController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * 2f * elemental_atk * concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 2f * elemental_atk * concentration / 4f;
         animator.SetTrigger("attack");
     }
 
@@ -474,7 +481,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicCircleEffect, attackPos.position + new Vector3(0, 5f, 0), effectRotation);
         skillEffect.GetComponent<MagicCircleController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f + magic_atk)* concentration;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f + magic_atk) * concentration / 4f ;
         animator.SetTrigger("attack");
     }
 
@@ -541,14 +548,19 @@ public class PlayerController : MonoBehaviour
         audioMoveJumpATK.clip = audioHit;
         audioMoveJumpATK.Play();
     }
-    void IncreaseExp(float exp_)
+    public void IncreaseExp(float exp_)
     {
         this.exp += exp_;
         //레벨당 요구경험치  50씩 추가
         if (exp > 50 + 50*level)
         {
             exp -= 50 + 50 * level;
+            float dir = transform.localScale.x > 0 ? 1f : -1f;
+            Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
+            GameObject skillEffect = Instantiate(levelUpEffect, attackPos.position + new Vector3(0f, 0f, 0), effectRotation);
             level += 1;
+            skillPoints += 2;
+            statPoints += 2;
         }
     }
     void RecoveryShield(float amount = 0.5f)
