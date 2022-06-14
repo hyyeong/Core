@@ -124,11 +124,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Wolf
-  maxHp: 2500
-  nowHp: 2500
+  maxHp: 2000
+  nowHp: 2000
   atkDmg: 150
-  atkSpeed: 2
-  moveSpeed: 1
+  atkSpeed: 1.75
+  moveSpeed: 2
   atkRange: 5
   fieldOfVision: 20
   exp: 50

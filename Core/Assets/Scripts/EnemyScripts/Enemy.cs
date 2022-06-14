@@ -65,6 +65,12 @@ public class Enemy : MonoBehaviour
                 hpBar.position = _hpBarPos;
             }
 
+            if (enemyName.Equals("Boss"))
+            {
+                Vector3 _hpBarPos = Camera.main.WorldToScreenPoint
+                (new Vector3(transform.position.x, transform.position.y + 10, 0));
+                hpBar.position = _hpBarPos;
+            }
 
             nowHpbar.fillAmount = (float)nowHp / (float)maxHp;
 

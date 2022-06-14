@@ -38,6 +38,12 @@ public class PlayerController : MonoBehaviour
     // UI
     Text hptext;
     Text sheildtext;
+    public Text StatHpText;
+    public Text StatManaText;
+    public Text StatSheildText;
+    public Text StatAtkText;
+    public Text StatArmorText;
+    public Text StatPointText;
     // Effect
     public GameObject levelUpEffect;
     public GameObject healEffect;
@@ -181,6 +187,7 @@ public class PlayerController : MonoBehaviour
         RecoveryMana(recoveryManaPerSec * Time.deltaTime);
         Die();
         CheckSkill();
+        UIUpdate();
         // 속도 제한
         float speedx = Mathf.Abs(this.rigid2D.velocity.x);
         BGspeed = (speedx > 0f) ? 0.1f * key * (maxWalkSpeed/3.0f): 0f;
@@ -528,12 +535,18 @@ public class PlayerController : MonoBehaviour
     }
     void UIUpdate()
     {
-        hptext.text = $"{hp}/{MAX_HP}";
-        sheildtext.text = $"{shield}/{MAX_SHIELD}";
+        //hptext.text = $"{hp}/{MAX_HP}";
+        //sheildtext.text = $"{shield}/{MAX_SHIELD}";
+        StatHpText.text = $"{MAX_HP}";
+        StatManaText.text = $"{MAX_MANA}";
+        StatSheildText.text = $"{MAX_SHIELD}";
+        StatAtkText.text = $"{atk_damage}";
+        StatArmorText.text = $"{armor}";
+        StatPointText.text = $"SP : {statPoints}";
     }
     public void Damaged(float damage)
     {
-        float dam = damage;
+        float dam = damage-armor;
         if (shield < dam)
         {
             dam -= shield;
@@ -584,6 +597,53 @@ public class PlayerController : MonoBehaviour
         else
         {
             mana = MAX_MANA;
+        }
+    }
+
+    public void StatHp()
+    {
+        if(statPoints>0)
+        {
+            statPoints--;
+            MAX_HP += 150;
+            hp += 150;
+        }
+    }
+    public void StatSheild()
+    {
+        if (statPoints > 0)
+        {
+            statPoints--;
+            MAX_SHIELD += 300;
+            shield += 300;
+        }
+    }
+
+    public void StatMana()
+    {
+        if (statPoints > 0)
+        {
+            statPoints--;
+            MAX_MANA += 300;
+            mana += 300;
+        }
+    }
+
+    public void StatAttack()
+    {
+        if (statPoints > 0)
+        {
+            statPoints--;
+            atk_damage += 50;
+        }
+    }
+
+    public void StatArmor()
+    {
+        if (statPoints > 0)
+        {
+            statPoints--;
+            armor += 10;
         }
     }
 }

@@ -184,9 +184,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Slime
-  maxHp: 2500
-  nowHp: 2500
-  atkDmg: 350
+  maxHp: 1500
+  nowHp: 1500
+  atkDmg: 400
   atkSpeed: 2
   moveSpeed: 1
   atkRange: 5
