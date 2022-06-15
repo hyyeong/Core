@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
                 (new Vector3(transform.position.x, transform.position.y - 1, 0));
                 hpBar.position = _hpBarPos;
             }
-            if (enemyName.Equals("Wolf"))
+            if (enemyName.Equals("Wolf")||enemyName.Equals("Boss2"))
             {
                 Vector3 _hpBarPos = Camera.main.WorldToScreenPoint
                (new Vector3(transform.position.x, transform.position.y + 2, 0));
@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour
             if (enemyName.Equals("Boss"))
             {
                 Vector3 _hpBarPos = Camera.main.WorldToScreenPoint
-                (new Vector3(transform.position.x, transform.position.y + 10, 0));
+                (new Vector3(transform.position.x, transform.position.y + 7, 0));
                 hpBar.position = _hpBarPos;
             }
 
@@ -86,6 +86,7 @@ public class Enemy : MonoBehaviour
         {
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
     private void OnTriggerStay2D(Collider2D col)
@@ -95,6 +96,7 @@ public class Enemy : MonoBehaviour
             invincibility = 0f;
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
     
@@ -111,6 +113,10 @@ public class Enemy : MonoBehaviour
         if (enemyName.Equals("Boss"))
         {
             GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage2();
+        }
+        if (enemyName.Equals("Boss2"))
+        {
+            GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage3();
         }
     }
 

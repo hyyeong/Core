@@ -36,8 +36,15 @@ public class PlayerController : MonoBehaviour
     int key = 1;
 
     // UI
-    Text hptext;
-    Text sheildtext;
+    public Image hpBar;
+    public Image mpBar;
+    public Image expBar;
+    public Image sheildBar;
+    public Text hpText;
+    public Text sheildText;
+    public Text manaText;
+    public Text levelText;
+
     public Text StatHpText;
     public Text StatManaText;
     public Text StatSheildText;
@@ -60,9 +67,10 @@ public class PlayerController : MonoBehaviour
     public GameObject blizzardEffect;
 
     //스탯 관련
-    public float MAX_HP { get; set; } = 3000;
-    public float MAX_SHIELD { get; set; } = 6000;
-    public float MAX_MANA { get; set; } = 6000;
+    public float MAX_HP { get; set; } = 1500;
+    public float MAX_SHIELD { get; set; } = 500;
+    public float MAX_MANA { get; set; } = 1000;
+    public float MAX_EXP { get; set; } = 100;
     public float atk_damage { get; set; } = 250;
     public float jumpForce;
     public float walkForce;
@@ -70,8 +78,8 @@ public class PlayerController : MonoBehaviour
     public float attack_speed { set; get; } = 1f;
     public float attack_cool { set; get; } = 0;
     public float armor { set; get; } = 0;
-    public float recoverySheildPerSec { set; get; } = 10f;
-    public float recoveryManaPerSec { set; get; } = 10f;
+    public float recoverySheildPerSec { set; get; } = 20f;
+    public float recoveryManaPerSec { set; get; } = 8f;
     public float manaDrain { set; get; } = 0;
     public float cycle { set; get; } = 1f; // 마나소모량 비율
     float hp ;
@@ -86,8 +94,8 @@ public class PlayerController : MonoBehaviour
     float exp = 0;
 
     // 스킬 관련
-    public int statPoints = 10;
-    public int skillPoints = 10;
+    public int statPoints = 0;
+    public int skillPoints = 0;
     public SkillSet QSkill { set; get; }
     public SkillSet WSkill { set; get; }
     public SkillSet ESkill { set; get; }
@@ -135,9 +143,7 @@ public class PlayerController : MonoBehaviour
         this.animator = GetComponent<Animator>();
         this.attackPos = PlayerAttackPos.transform;
         this.buffEffect = GameObject.Find("BuffEffectGenerator").GetComponent<BuffEffectGenerator>();
-        // UI 객체 휙득
-        /*hptext = GameObject.Find("hpText").GetComponent<Text>();
-        sheildtext = GameObject.Find("shieldText").GetComponent<Text>();*/
+
         // 스텟 설정
         hp = MAX_HP;
         shield = MAX_SHIELD;
@@ -173,7 +179,7 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Trap")&&invincibility>0.5f)
         {
             invincibility = 0f;
-            Damaged(100);
+            Damaged(1500);
         }
     }
     // Update is called once per frame
@@ -374,7 +380,8 @@ public class PlayerController : MonoBehaviour
         hp += atk_damage * 2;
         Quaternion rotate = Quaternion.Euler(-90, 0, 0);
         Instantiate(healEffect, transform.position, rotate);
-        Debug.Log("힐스킬");
+        if (hp > MAX_HP)
+            hp = MAX_HP;
     }
     public void SkillLifeSteal()
     {
@@ -535,8 +542,17 @@ public class PlayerController : MonoBehaviour
     }
     void UIUpdate()
     {
-        //hptext.text = $"{hp}/{MAX_HP}";
-        //sheildtext.text = $"{shield}/{MAX_SHIELD}";
+        hpBar.fillAmount = hp / MAX_HP;
+        sheildBar.fillAmount = shield / MAX_SHIELD;
+        mpBar.fillAmount = mana / MAX_MANA;
+        expBar.fillAmount = exp / MAX_EXP;
+
+        hpText.text = $"{ hp : 0} / {MAX_HP : 0}";
+        sheildText.text = $"{shield : 0} / {MAX_SHIELD : 0}";
+        manaText.text = $"{mana : 0} / {MAX_MANA : 0}";
+
+        levelText.text = $"{level : 00}";
+
         StatHpText.text = $"{MAX_HP}";
         StatManaText.text = $"{MAX_MANA}";
         StatSheildText.text = $"{MAX_SHIELD}";
@@ -565,15 +581,16 @@ public class PlayerController : MonoBehaviour
     {
         this.exp += exp_;
         //레벨당 요구경험치  50씩 추가
-        if (exp > 50 + 50*level)
+        if (exp > MAX_EXP)
         {
-            exp -= 50 + 50 * level;
+            exp -= MAX_EXP;
             float dir = transform.localScale.x > 0 ? 1f : -1f;
             Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
             GameObject skillEffect = Instantiate(levelUpEffect, attackPos.position + new Vector3(0f, 0f, 0), effectRotation);
             level += 1;
             skillPoints += 2;
             statPoints += 2;
+            MAX_EXP += 100;
         }
     }
     void RecoveryShield(float amount = 0.5f)
@@ -605,8 +622,8 @@ public class PlayerController : MonoBehaviour
         if(statPoints>0)
         {
             statPoints--;
-            MAX_HP += 150;
-            hp += 150;
+            MAX_HP += 200;
+            hp += 200;
         }
     }
     public void StatSheild()
@@ -616,6 +633,7 @@ public class PlayerController : MonoBehaviour
             statPoints--;
             MAX_SHIELD += 300;
             shield += 300;
+            recoverySheildPerSec += 15f;
         }
     }
 
@@ -626,6 +644,7 @@ public class PlayerController : MonoBehaviour
             statPoints--;
             MAX_MANA += 300;
             mana += 300;
+            recoveryManaPerSec += 1f;
         }
     }
 
@@ -643,7 +662,17 @@ public class PlayerController : MonoBehaviour
         if (statPoints > 0)
         {
             statPoints--;
-            armor += 10;
+            armor += 40;
         }
+    }
+
+    public void LifeSteal(float damage)
+    {
+        hp += damage * lifeSteal;
+        mana += damage * manaDrain;
+        if (hp > MAX_HP)
+            hp = MAX_HP;
+        if (mana > MAX_MANA)
+            mana = MAX_MANA;
     }
 }

@@ -64,6 +64,7 @@ public class Witch : MonoBehaviour
         {
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
     private void OnTriggerStay2D(Collider2D col)
@@ -73,6 +74,7 @@ public class Witch : MonoBehaviour
             invincibility = 0f;
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
 

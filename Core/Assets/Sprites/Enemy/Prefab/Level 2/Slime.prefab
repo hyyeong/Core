@@ -48,7 +48,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -2}
   serializedVersion: 2
-  m_Radius: 1.25
+  m_Radius: 1.4
 --- !u!114 &3504050450138843179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ MonoBehaviour:
   atkDmg: 680
   atkSpeed: 1.6
   moveSpeed: 1.5
-  atkRange: 5
+  atkRange: 7
   fieldOfVision: 20
   exp: 100
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}

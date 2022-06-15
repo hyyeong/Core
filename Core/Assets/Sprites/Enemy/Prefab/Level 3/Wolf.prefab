@@ -129,7 +129,7 @@ MonoBehaviour:
   atkDmg: 680
   atkSpeed: 1.2
   moveSpeed: 2.5
-  atkRange: 5
+  atkRange: 6
   fieldOfVision: 25
   exp: 150
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
@@ -340,7 +340,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.5, y: -0.5}
   serializedVersion: 2
-  m_Radius: 0.75
+  m_Radius: 1
 --- !u!114 &1792937591872660319
 MonoBehaviour:
   m_ObjectHideFlags: 0
