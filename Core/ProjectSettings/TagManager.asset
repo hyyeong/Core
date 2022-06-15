@@ -12,6 +12,7 @@ TagManager:
   - enemyattack
   - PlayerAtk
   - PlayerDotAtk
+  - hpbar
   layers:
   - Default
   - TransparentFX

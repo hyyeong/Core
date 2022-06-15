@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameDirector : MonoBehaviour
@@ -43,6 +44,10 @@ public class GameDirector : MonoBehaviour
     public Text skillAlert;
     public GameObject Alert;
 
+    // 넘어갈때도 유지
+    public GameObject Player;
+    public Canvas Canvas;
+    public GameObject BuffEffectGenerator;
     public AudioClip learnAudioClip;
     AudioSource learnAudio;
     [System.Serializable]
@@ -105,7 +110,42 @@ public class GameDirector : MonoBehaviour
                 bgmLoop = 0;
         }
     }
+    public void LoadStage2()
+    {
+        Destroy(GameObject.Find("Enemy"));
+        for (int i = 0; i < Canvas.transform.childCount; i++) 
+        {
+            if (Canvas.transform.GetChild(i).CompareTag("hpbar"))
+            {
+                Destroy(Canvas.transform.GetChild(i).gameObject);
+            }
+        }
 
+        SceneManager.LoadScene("Stage2");
+        DontDestroyOnLoad(Player);
+        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(Canvas);
+        DontDestroyOnLoad(BuffEffectGenerator);
+        Player.transform.position = new Vector3(0, -5, 0);
+    }
+    public void LoadStage3()
+    {
+        Destroy(GameObject.Find("Enemy"));
+        for (int i = 0; i < Canvas.transform.childCount; i++)
+        {
+            if (Canvas.transform.GetChild(i).CompareTag("hpbar"))
+            {
+                Destroy(Canvas.transform.GetChild(i).gameObject);
+            }
+        }
+
+        SceneManager.LoadScene("Stage3");
+        DontDestroyOnLoad(Player);
+        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(Canvas);
+        DontDestroyOnLoad(BuffEffectGenerator);
+        Player.transform.position = new Vector3(0, -5, 0);
+    }
     public void LearnElementalEnforce()
     {
         if (player.skillPoints > 0 && elementalEnforceCondition)

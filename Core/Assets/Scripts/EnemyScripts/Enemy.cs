@@ -80,7 +80,6 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("PlayerAtk"))
@@ -98,7 +97,7 @@ public class Enemy : MonoBehaviour
             nowHp = nowHp - col.GetComponent<ATK>().damage;
         }
     }
-
+    
     void Die() // 사망시
     {
         alive = false;
@@ -109,6 +108,10 @@ public class Enemy : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());       // 중력 비활성화
         Destroy(hpBar.gameObject);                  // 체력바 제거
         Destroy(gameObject, 2);                     // 2초후 제거
+        if (enemyName.Equals("Boss"))
+        {
+            GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage2();
+        }
     }
 
     void SetAttackSpeed(float speed)
