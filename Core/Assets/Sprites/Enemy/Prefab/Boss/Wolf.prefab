@@ -124,14 +124,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Boss2
-  maxHp: 9800
-  nowHp: 9800
-  atkDmg: 680
-  atkSpeed: 1.2
-  moveSpeed: 2.5
+  maxHp: 88000
+  nowHp: 88000
+  atkDmg: 1900
+  atkSpeed: 0.6
+  moveSpeed: 3
   atkRange: 5
   fieldOfVision: 25
-  exp: 150
+  exp: 1000
+  alive: 1
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
   canvas: {fileID: 0}
   height: 1.7

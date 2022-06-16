@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Witch : MonoBehaviour
 {
@@ -87,8 +88,14 @@ public class Witch : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());       // 중력 비활성화
         Destroy(hpBar.gameObject);                  // 체력바 제거
         Destroy(gameObject, 2);                     // 2초후 제거
+        Invoke("Clear", 1f); // 2초후 클리어
     }
+    void Clear()
+    {
 
+        GameObject.Find("GameDirector").GetComponent<GameDirector>().DestroyObject();
+        SceneManager.LoadScene("Winer");
+    }
     void SetAttackSpeed(float speed, float magic)
     {
         enemyAnimator.SetFloat("attackSpeed", speed);

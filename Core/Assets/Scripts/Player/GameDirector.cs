@@ -94,6 +94,11 @@ public class GameDirector : MonoBehaviour
         learnAudio = gameObject.AddComponent<AudioSource>();
         learnAudio.loop = false;
         learnAudio.clip = learnAudioClip;
+
+        DontDestroyOnLoad(Player);
+        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(Canvas);
+        DontDestroyOnLoad(BuffEffectGenerator);
     }
 
     void Update()
@@ -122,10 +127,6 @@ public class GameDirector : MonoBehaviour
         }
 
         SceneManager.LoadScene("Stage2");
-        DontDestroyOnLoad(Player);
-        DontDestroyOnLoad(this);
-        DontDestroyOnLoad(Canvas);
-        DontDestroyOnLoad(BuffEffectGenerator);
         Player.transform.position = new Vector3(0, -5, 0);
     }
     public void LoadStage3()
@@ -140,11 +141,14 @@ public class GameDirector : MonoBehaviour
         }
 
         SceneManager.LoadScene("Stage3");
-        DontDestroyOnLoad(Player);
-        DontDestroyOnLoad(this);
-        DontDestroyOnLoad(Canvas);
-        DontDestroyOnLoad(BuffEffectGenerator);
         Player.transform.position = new Vector3(0, -5, 0);
+    }
+    public void DestroyObject()
+    {
+        Destroy(Player);
+        Destroy(this);
+        Destroy(Canvas.gameObject);
+        Destroy(BuffEffectGenerator);
     }
     public void LearnElementalEnforce()
     {
@@ -372,7 +376,7 @@ public class GameDirector : MonoBehaviour
             manaDrainButton.interactable = false;
             //스킬 활성화
             // 패시브 부과효과
-            float drain = 0.1f;
+            float drain = 0.01f;
             player.manaDrain += drain;
             //알림
             skillAlert.text = $"마나흡수량 가한피해량의 {drain*100}%만큼 증가 ";

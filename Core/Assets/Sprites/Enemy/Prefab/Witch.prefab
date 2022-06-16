@@ -48,7 +48,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.8, y: -0.5}
   serializedVersion: 2
-  m_Radius: 1.8
+  m_Radius: 2
 --- !u!114 &295616986405663264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,7 +92,7 @@ Transform:
   m_GameObject: {fileID: 4873080917476471658}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.6, y: 2.7, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8273872419073910155}
@@ -231,15 +231,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Witch
-  maxHp: 2000
-  nowHp: 2000
-  atkDmg: 1
+  maxHp: 200000
+  nowHp: 200000
+  atkDmg: 1500
   atkSpeed: 0.3
-  moveSpeed: 2
-  atkRange: 5
+  moveSpeed: 4
+  atkRange: 7
   fieldOfVision: 20
-  mgSpeed: 2
-  mgRange: 15
+  mgSpeed: 3
+  mgRange: 20
   alive: 1
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
   height: 1.7

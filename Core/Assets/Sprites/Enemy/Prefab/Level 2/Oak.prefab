@@ -207,7 +207,7 @@ MonoBehaviour:
   enemyName: Oak
   maxHp: 4700
   nowHp: 4700
-  atkDmg: 500
+  atkDmg: 420
   atkSpeed: 1.5
   moveSpeed: 1.25
   atkRange: 5

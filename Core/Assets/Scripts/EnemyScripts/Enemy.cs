@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     public float fieldOfVision;
     public float exp;
 
-    private bool alive = true;
+    public bool alive = true;
 
     Image nowHpbar;
 
@@ -112,14 +112,23 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject, 2);                     // 2초후 제거
         if (enemyName.Equals("Boss"))
         {
-            GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage2();
+            Invoke("Clear1", 1f);
+            Debug.Log("ENVOKE");
         }
         if (enemyName.Equals("Boss2"))
         {
-            GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage3();
+            Invoke("Clear2", 1f);
         }
     }
-
+    void Clear1()
+    {
+        GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage2();
+        Debug.Log("CLeE");
+    }
+    void Clear2()
+    {
+        GameObject.Find("GameDirector").GetComponent<GameDirector>().LoadStage3();
+    }
     void SetAttackSpeed(float speed)
     {
         enemyAnimator.SetFloat("attackSpeed", speed);

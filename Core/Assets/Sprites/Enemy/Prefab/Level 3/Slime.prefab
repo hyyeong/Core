@@ -186,7 +186,7 @@ MonoBehaviour:
   enemyName: Slime
   maxHp: 5800
   nowHp: 5800
-  atkDmg: 950
+  atkDmg: 700
   atkSpeed: 1.3
   moveSpeed: 1.8
   atkRange: 7

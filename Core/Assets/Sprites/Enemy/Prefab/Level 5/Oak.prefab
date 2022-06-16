@@ -141,7 +141,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d3bc2fad9c82fee4a8defebb05aecbb8, type: 3}
-  m_Color: {r: 1, g: 0.4009434, b: 0.4009434, a: 1}
+  m_Color: {r: 0.25511748, g: 0.3151569, b: 0.5943396, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -205,14 +205,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Oak
-  maxHp: 7000
-  nowHp: 7000
-  atkDmg: 680
-  atkSpeed: 1.25
-  moveSpeed: 1.5
+  maxHp: 12400
+  nowHp: 12400
+  atkDmg: 900
+  atkSpeed: 1
+  moveSpeed: 1.55
   atkRange: 5
   fieldOfVision: 25
-  exp: 150
+  exp: 250
+  alive: 1
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
   canvas: {fileID: 0}
   height: 1.7

@@ -126,7 +126,7 @@ MonoBehaviour:
   enemyName: Wolf
   maxHp: 6600
   nowHp: 6600
-  atkDmg: 680
+  atkDmg: 762
   atkSpeed: 1.2
   moveSpeed: 2.5
   atkRange: 6
