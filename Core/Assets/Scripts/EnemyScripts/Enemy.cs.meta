@@ -3,7 +3,11 @@ guid: c2cf03c5d7f0c804eb037c764c6f16bc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - damageText: {fileID: 634645888417143937, guid: 6cea9a2bf55900f4ea62397a6f6d455d, type: 3}
+  - prfHpBar: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - enemyAnimator: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

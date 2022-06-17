@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 
     public bool alive = true;
 
+    public Text damageText;
     Image nowHpbar;
 
     public GameObject prfHpBar;
@@ -86,16 +87,24 @@ public class Enemy : MonoBehaviour
         {
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            Text text = Instantiate(damageText, canvas.transform);
+            text.text = System.Convert.ToInt32(col.GetComponent<ATK>().damage).ToString();
+            text.GetComponent<DamageTextController>().initTransform = col.transform.position;
+            text.transform.position = Camera.main.WorldToScreenPoint(col.transform.position);
             GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.25f)
+        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.125f)
         {
             invincibility = 0f;
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
+            Text text = Instantiate(damageText, canvas.transform);
+            text.text = System.Convert.ToInt32(col.GetComponent<ATK>().damage).ToString();
+            text.GetComponent<DamageTextController>().initTransform = this.transform.position + new Vector3(0,2f,0);
+            text.transform.position = Camera.main.WorldToScreenPoint(col.transform.position);
             GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
@@ -110,10 +119,10 @@ public class Enemy : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());       // 중력 비활성화
         Destroy(hpBar.gameObject);                  // 체력바 제거
         Destroy(gameObject, 2);                     // 2초후 제거
+        transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = false;
         if (enemyName.Equals("Boss"))
         {
             Invoke("Clear1", 1f);
-            Debug.Log("ENVOKE");
         }
         if (enemyName.Equals("Boss2"))
         {

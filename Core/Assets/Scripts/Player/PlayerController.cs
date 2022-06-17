@@ -478,7 +478,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(fireShieldEffect, attackPos.position + new Vector3(0f,0f, 0), effectRotation);
         skillEffect.GetComponent<FireShieldController>().setDirection(transform.localScale.x);
-        skillEffect.transform.GetChild(2).GetComponent<ATK>().damage = atk_damage * 1f * elemental_atk * concentration;
+        skillEffect.transform.GetChild(2).GetComponent<ATK>().damage = atk_damage * 0.6f * elemental_atk * concentration;
         animator.SetTrigger("attack");
     }
     public void SkillBlizzard()
@@ -488,7 +488,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(blizzardEffect, attackPos.position + new Vector3(dir*15f, 5f, 0), effectRotation);
         skillEffect.GetComponent<BlizzardController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * 2f * elemental_atk * concentration / 6f;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 2f * elemental_atk * concentration / 10f;
         animator.SetTrigger("attack");
     }
 
@@ -499,7 +499,7 @@ public class PlayerController : MonoBehaviour
         Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f, 0f)); // 쿼터니언 오일러각 사용
         GameObject skillEffect = Instantiate(magicCircleEffect, attackPos.position + new Vector3(0, 5f, 0), effectRotation);
         skillEffect.GetComponent<MagicCircleController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f + magic_atk) * concentration / 8f ;
+        skillEffect.GetComponent<ATK>().damage = atk_damage * (2f + magic_atk) * concentration / 16f ;
         animator.SetTrigger("attack");
     }
 
@@ -585,7 +585,7 @@ public class PlayerController : MonoBehaviour
     {
         this.exp += exp_;
         //레벨당 요구경험치  50씩 추가
-        if (exp > MAX_EXP)
+        if (exp >= MAX_EXP)
         {
             exp -= MAX_EXP;
             float dir = transform.localScale.x > 0 ? 1f : -1f;

@@ -22,6 +22,7 @@ public class Witch : MonoBehaviour
 
     Image nowHpbar;
 
+    public Text damageText;
     public GameObject prfHpBar;
     GameObject canvas;
 
@@ -64,15 +65,23 @@ public class Witch : MonoBehaviour
         if (col.CompareTag("PlayerAtk"))
         {
             enemyAnimator.SetTrigger("Damage");
+            Text text = Instantiate(damageText, canvas.transform);
+            text.text = System.Convert.ToInt32(col.GetComponent<ATK>().damage).ToString();
+            text.GetComponent<DamageTextController>().initTransform = col.transform.position;
+            text.transform.position = Camera.main.WorldToScreenPoint(col.transform.position);
             nowHp = nowHp - col.GetComponent<ATK>().damage;
             GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);
         }
     }
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.25f)
+        if (col.CompareTag("PlayerDotAtk") && invincibility > 0.125f)
         {
             invincibility = 0f;
+            Text text = Instantiate(damageText, canvas.transform);
+            text.text = System.Convert.ToInt32(col.GetComponent<ATK>().damage).ToString();
+            text.GetComponent<DamageTextController>().initTransform = this.transform.position + new Vector3(0, 2f, 0);
+            text.transform.position = Camera.main.WorldToScreenPoint(col.transform.position);
             enemyAnimator.SetTrigger("Damage");
             nowHp = nowHp - col.GetComponent<ATK>().damage;
             GameObject.Find("Player").GetComponent<PlayerController>().LifeSteal(col.GetComponent<ATK>().damage);

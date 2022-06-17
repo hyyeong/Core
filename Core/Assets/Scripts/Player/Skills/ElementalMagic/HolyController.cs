@@ -20,6 +20,8 @@ public class HolyController : MonoBehaviour
     void Update()
     {
         life += Time.deltaTime;
+        if (life >= 0.05)
+            GetComponent<CircleCollider2D>().enabled = false;
         if (life >= LIFETIME)
             Destroy(this.gameObject);
     }

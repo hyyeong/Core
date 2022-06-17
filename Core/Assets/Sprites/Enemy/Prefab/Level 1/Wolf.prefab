@@ -132,6 +132,8 @@ MonoBehaviour:
   atkRange: 5
   fieldOfVision: 20
   exp: 50
+  alive: 1
+  damageText: {fileID: 634645888417143937, guid: 6cea9a2bf55900f4ea62397a6f6d455d, type: 3}
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
   canvas: {fileID: 0}
   height: 1.7

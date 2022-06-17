@@ -233,7 +233,7 @@ MonoBehaviour:
   enemyName: Witch
   maxHp: 200000
   nowHp: 200000
-  atkDmg: 1500
+  atkDmg: 850
   atkSpeed: 0.3
   moveSpeed: 4
   atkRange: 7
@@ -241,6 +241,7 @@ MonoBehaviour:
   mgSpeed: 3
   mgRange: 20
   alive: 1
+  damageText: {fileID: 634645888417143937, guid: 6cea9a2bf55900f4ea62397a6f6d455d, type: 3}
   prfHpBar: {fileID: 3079106696570312189, guid: ba8ff71553072284aab5e2d1e6b51bf4, type: 3}
   height: 1.7
   enemyAnimator: {fileID: 4873080917476471659}

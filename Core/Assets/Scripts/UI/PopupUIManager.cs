@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PopupUIManager : MonoBehaviour
@@ -8,16 +7,12 @@ public class PopupUIManager : MonoBehaviour
     /***********************************************************************
     *                               Public Fields
     ***********************************************************************/
-    public PopupUI _inventoryPopup;
     public PopupUI _skillPopup;
-    public PopupUI _characterInfoPopup;
 
     public AudioClip sound;
     [Space]
     public KeyCode _escapeKey = KeyCode.Escape;
-    public KeyCode _inventoryKey = KeyCode.I;
     public KeyCode _skillKey = KeyCode.K;
-    public KeyCode _charInfoKey = KeyCode.C;
 
     /***********************************************************************
     *                               Private Fields
@@ -56,9 +51,7 @@ public class PopupUIManager : MonoBehaviour
         }
 
         // 단축키 조작
-        ToggleKeyDownAction(_inventoryKey, _inventoryPopup);
         ToggleKeyDownAction(_skillKey, _skillPopup);
-        ToggleKeyDownAction(_charInfoKey, _characterInfoPopup);
     }
 
     /***********************************************************************
@@ -69,7 +62,7 @@ public class PopupUIManager : MonoBehaviour
         // 1. 리스트 초기화
         _allPopupList = new List<PopupUI>()
         {
-            _inventoryPopup, _skillPopup, _characterInfoPopup
+             _skillPopup
         };
 
         // 2. 모든 팝업에 이벤트 등록
