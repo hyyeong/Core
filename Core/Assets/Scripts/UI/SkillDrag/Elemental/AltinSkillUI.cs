@@ -27,8 +27,9 @@ public class AltinSkillUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     void Update()
     {
-
     }
+    // 마우스 커서가 슬롯에 들어갈 때 발동
+    
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!btn.IsInteractable())

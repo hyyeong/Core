@@ -18,11 +18,11 @@ public class LightningArrowController : MonoBehaviour
         //적이 타격된경우
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Map"))
         {
-            //적에게 대미지 처리
+            //타격 이팩트 발생
             Vector3 hitPos = transform.position + new Vector3(0, 0, 0);
             Instantiate(hitEffect, hitPos, this.transform.rotation);
         }
-        Debug.Log("충돌");
+        // 플레이어는 무시
         if (!collision.gameObject.CompareTag("Player"))
         {
             Destroy(this.gameObject);

@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
     float lifeSteal = 0f; // 대미지 넣을 때 구현하기
     float recoveryShield = 0f;
     float ara = 1f;
-    float concentration = 1f; //대미지 넣을때 구현하기
+    public float concentration = 1f; //대미지 넣을때 구현하기
     float recycling = 0f;
     // 버프 스킬 관리 변수
     // 효과 종료시점 때문에 get 필수
@@ -282,20 +282,20 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && isJump < MAX_JUMP)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && isJump < MAX_JUMP) // MAX_Jump 점프제한
         {
             ++isJump;
             float plusJumpForce = 1;
-            if (isJump == 2) plusJumpForce = 1.5f;
+            if (isJump == 2) plusJumpForce = 1.5f; //2번쨰 점프 속도지정
             this.rigid2D.AddForce(Vector2.up * this.jumpForce * plusJumpForce *ara);
             animator.SetBool("isJump", true);
-            audioMoveJumpATK.clip = audioJump1;
+            audioMoveJumpATK.clip = audioJump1; // 오디오 재생
             audioMoveJumpATK.Play();
         }
     }
     private void CheckRun()
     {
-        key = 0;
+        key = 0; // 방향 전환
         animator.SetBool("isRun", false);
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -457,10 +457,10 @@ public class PlayerController : MonoBehaviour
     public void SkillLightningArrow()
     {
         float dir = transform.localScale.x > 0 ? -45f : 45f; 
-        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용
-        GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation);
-        skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);
-        skillEffect.GetComponent<ATK>().damage = atk_damage * 5.0f * elemental_atk * concentration;
+        Quaternion effectRotation = Quaternion.Euler(new Vector3(0f, 0f,  dir)); // 쿼터니언 오일러각 사용 각도만큼 Z 축 회전
+        GameObject skillEffect = Instantiate(lightningArrowEffect, attackPos.position + new Vector3(0, 15f, 0), effectRotation); // 위치 및 각도 지정 후 생성
+        skillEffect.GetComponent<LightningArrowController>().setDirection(transform.localScale.x);  // 방향 설정
+        skillEffect.GetComponent<ATK>().damage = atk_damage * 5.0f * elemental_atk * concentration; // 대미지 설정
         animator.SetTrigger("attack");
     }
     public void SkillArtifficialSun()

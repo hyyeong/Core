@@ -329,7 +329,7 @@ public class GameDirector : MonoBehaviour
 
             // 패시브 부과효과
             //알림
-            skillAlert.text = $"MagicArrow : 공격력 X 2의 데미지를 입히는 화살 소환 ";
+            skillAlert.text = $"MagicArrow : 공격력 X 3의 데미지를 입히는 화살 소환 ";
             // 공통효과음
             soundEffect();
         }
@@ -395,7 +395,7 @@ public class GameDirector : MonoBehaviour
             manaDrainCondition = true;
             recycleCondition = true;
             // 패시브 부과효과
-            float mana = 5f;
+            float mana = 8f;
             player.recoveryManaPerSec += mana;
             //알림
             skillAlert.text = $"마나회복량 초당 {mana} 만큼 증가 ";
@@ -463,7 +463,7 @@ public class GameDirector : MonoBehaviour
             //스킬 활성화
 
             // 패시브 부과효과
-            player.attack_speed -= 0.75f;
+            player.attack_speed -= 0.55f;
             //알림
             skillAlert.text = $"공격속도가 1초에서 0.25초로 변경되었습니다.";
             // 공통효과음
@@ -592,7 +592,7 @@ public class GameDirector : MonoBehaviour
             healCondition = true;
             armorEnforceCondition = true;
             // 패시브 부과효과
-            float health = 250;
+            float health = 500;
             player.MAX_HP += health;
 
             //알림
@@ -609,7 +609,7 @@ public class GameDirector : MonoBehaviour
             //버튼 비활성화
             armorEnforceButton.interactable = false;
             //패시브 부과효과
-            float armor = 5f;
+            float armor = 100f;
             player.armor +=armor;
 
             //알림
