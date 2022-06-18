@@ -212,6 +212,7 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
+            //시간 체크
             invincibility += Time.deltaTime;
             lifeStealTime -= Time.deltaTime;
             recoverySheildTime -= Time.deltaTime;

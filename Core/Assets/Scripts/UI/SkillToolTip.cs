@@ -12,6 +12,8 @@ public class SkillToolTip : MonoBehaviour
     private Text txtSkillName;
     [SerializeField]
     private Text txtSkillDesc;
+    [SerializeField]
+    private GameObject parents;
 
     private PlayerController player;
     private Dictionary<string, string> skillDesc = new Dictionary<string, string>();
@@ -19,10 +21,17 @@ public class SkillToolTip : MonoBehaviour
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
     }
+    private void Update()
+    {
+        if (!parents.activeInHierarchy)
+        {
+            HideToolTip();
+        }
+    }
     public void ShowToolTip(string name,bool isPassive, Vector3 _pos)
     {
         SkillUpdate();
-        toolTip.SetActive(true);
+        toolTip.gameObject.SetActive(true);
         toolTip.transform.position = _pos;
         if (isPassive)
         {
@@ -37,7 +46,7 @@ public class SkillToolTip : MonoBehaviour
 
     public void HideToolTip()
     {
-        toolTip.SetActive(false);
+        toolTip.gameObject.SetActive(false);
     }
     void SkillUpdate()
     {
