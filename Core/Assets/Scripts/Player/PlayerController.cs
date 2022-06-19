@@ -201,10 +201,10 @@ public class PlayerController : MonoBehaviour
             // 속도 제한
             float speedx = Mathf.Abs(this.rigid2D.velocity.x);
             BGspeed = (speedx > 0f) ? 0.1f * key * (maxWalkSpeed / 3.0f) : 0f;
-            if (speedx < this.maxWalkSpeed)
+            /*if (speedx < this.maxWalkSpeed)
             {
                 this.rigid2D.AddForce(transform.right * key * this.walkForce * Time.deltaTime);
-            }
+            }*/
         }
     }
 
@@ -304,6 +304,7 @@ public class PlayerController : MonoBehaviour
             if (!animator.GetBool("isJump"))
                 animator.SetBool("isRun", true);
             transform.localScale = new Vector3(key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            transform.position = transform.position + new Vector3(12f * Time.deltaTime, 0, 0);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
@@ -311,6 +312,7 @@ public class PlayerController : MonoBehaviour
             if (!animator.GetBool("isJump"))
                 animator.SetBool("isRun", true);
             transform.localScale = new Vector3(key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            transform.position = transform.position + new Vector3(-12f * Time.deltaTime, 0, 0);
         }
 
     }
